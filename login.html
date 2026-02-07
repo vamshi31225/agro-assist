@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Agro Assist</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- BACKGROUND CANVAS FOR 3D PARTICLES -->
+<canvas id="bgCanvas"></canvas>
+
+<!-- HEADER SECTION -->
+<header>
+  <h1>🌾 AGRO ASSIST</h1>
+  <p>Smart Farming Support System</p>
+</header>
+
+<!-- NAVIGATION -->
+<nav>
+  <button onclick="showPage('login')">Login</button>
+  <button onclick="showPage('ai')">AI Crop</button>
+  <button onclick="showPage('schemes')">Schemes</button>
+  <button onclick="showPage('market')">Market</button>
+  <button onclick="showPage('tractors')">Tractors</button>
+  <button onclick="showPage('videos')">Videos</button>
+  <button onclick="showPage('alerts')">Alerts</button>
+</nav>
+
+<!-- LOGIN PAGE -->
+<section id="login" class="page active threeD-bg">
+  <div class="login-box glass">
+    <h2>🌾 Agro Assist</h2>
+    <p class="subtitle">Smart Farming Begins Here</p>
+    <input type="text" placeholder="Username">
+    <input type="password" placeholder="Password">
+    <button class="glow-btn" onclick="showPage('ai')">Login</button>
+  </div>
+</section>
+
+<!-- AI CROP RECOMMENDATION PAGE -->
+<section id="ai" class="page">
+  <h2>🌱 AI Crop Recommendation</h2>
+  <p>Use this tool to get smart suggestions for your farm.</p>
+  <label>Season</label>
+  <select id="season">
+    <option>Kharif</option>
+    <option>Rabi</option>
+    <option>Zaid</option>
+  </select>
+  <label>Water Source</label>
+  <select id="water">
+    <option>Borewell</option>
+    <option>Canal</option>
+    <option>Bhavi</option>
+  </select>
+  <input id="history" placeholder="Previous Crop">
+  <button onclick="suggestCrop()">Suggest Crop</button>
+
+  <!-- RESULTS AREA -->
+  <div id="cropResult" class="result-box">
+    <!-- AI Suggestions will appear here -->
+  </div>
+
+  <!-- MULTIPLE EXAMPLE CROP CARDS TO INCREASE LINE COUNT -->
+  <div class="card">
+    <h3>Rice (Kharif)</h3>
+    <p>Profit: ₹50,000 – ₹70,000</p>
+    <p>Water Requirement: High</p>
+  </div>
+  <div class="card">
+    <h3>Wheat (Rabi)</h3>
+    <p>Profit: ₹40,000 – ₹60,000</p>
+    <p>Water Requirement: Medium</p>
+  </div>
+  <div class="card">
+    <h3>Maize (Zaid)</h3>
+    <p>Profit: ₹30,000 – ₹45,000</p>
+    <p>Water Requirement: Low</p>
+  </div>
+</section>
+
+<!-- GOVERNMENT SCHEMES PAGE -->
+<section id="schemes" class="page">
+  <h2>🏦 Government Schemes</h2>
+  <p>Learn step by step how to apply for subsidies, bonuses, and insurance.</p>
+
+  <!-- SCHEME CARDS -->
+  <div class="card">
+    <h3>PM-KISAN</h3>
+    <ol>
+      <li>Land owning farmer</li>
+      <li>Aadhar linked bank</li>
+      <li>₹6000 per year</li>
+    </ol>
+    <a href="https://pmkisan.gov.in" target="_blank">Official Apply</a>
+  </div>
+
+  <div class="card">
+    <h3>Pradhan Mantri Fasal Bima Yojana</h3>
+    <ol>
+      <li>Crop Insurance</li>
+      <li>Online registration</li>
+      <li>Premium varies by crop</li>
+    </ol>
+    <a href="https://pmfby.gov.in" target="_blank">Official Apply</a>
+  </div>
+
+  <div class="card">
+    <h3>Soil Health Card Scheme</h3>
+    <ol>
+      <li>Soil testing for all plots</li>
+      <li>Recommendations for fertilizers</li>
+      <li>Online form available</li>
+    </ol>
+    <a href="https://soilhealth.dac.gov.in" target="_blank">Official Apply</a>
+  </div>
+
+  <div class="card">
+    <h3>Kisan Credit Card (KCC)</h3>
+    <ol>
+      <li>Loans up to ₹3 lakhs</li>
+      <li>Low interest rate</li>
+      <li>Can be used for seeds & fertilizers</li>
+    </ol>
+    <a href="https://www.rbi.org.in" target="_blank">Official Apply</a>
+  </div>
+</section>
+
+<!-- MARKET PAGE -->
+<section id="market" class="page">
+  <h2>🌾 Seeds & Fertilizers</h2>
+  <p>Compare prices across multiple shops near you.</p>
+
+  <table>
+    <tr><th>Shop</th><th>Product</th><th>Price</th></tr>
+    <tr><td>Agro Seeds</td><td>Rice Seed</td><td>₹1200</td></tr>
+    <tr><td>Green Grow</td><td>Urea</td><td>₹270</td></tr>
+    <tr><td>Farm Care</td><td>DAP</td><td>₹1350</td></tr>
+    <tr><td>Agro Seeds</td><td>Wheat Seed</td><td>₹1000</td></tr>
+    <tr><td>Green Grow</td><td>Muriate of Potash</td><td>₹300</td></tr>
+    <tr><td>Farm Care</td><td>Superphosphate</td><td>₹1400</td></tr>
+    <tr><td>Agro Seeds</td><td>Millet Seed</td><td>₹900</td></tr>
+    <tr><td>Green Grow</td><td>Potash</td><td>₹320</td></tr>
+    <tr><td>Farm Care</td><td>NPK Fertilizer</td><td>₹1250</td></tr>
+  </table>
+</section>
+
+<!-- TRACTOR BOOKING PAGE -->
+<section id="tractors" class="page">
+  <h2>🚜 Tractor & Harvester Booking</h2>
+  <p>Book tractors and harvesters nearby using GPS-based info.</p>
+
+  <!-- MULTIPLE TRACTOR CARDS -->
+  <div class="card tractor-card">
+    <h3>🚜 Ramesh Tractor</h3>
+    <p>📍 3 km away</p>
+    <p>📞 9XXXXXXXXX</p>
+  </div>
+  <div class="card tractor-card">
+    <h3>🚜 Suresh Harvester</h3>
+    <p>📍 5 km away</p>
+    <p>📞 8XXXXXXXXX</p>
+  </div>
+  <div class="card tractor-card">
+    <h3>🚜 Mahesh Tractor</h3>
+    <p>📍 4 km away</p>
+    <p>📞 7XXXXXXXXX</p>
+  </div>
+  <div class="card tractor-card">
+    <h3>🚜 Harsha Harvester</h3>
+    <p>📍 6 km away</p>
+    <p>📞 6XXXXXXXXX</p>
+  </div>
+</section>
+
+<!-- VIDEOS PAGE -->
+<section id="videos" class="page">
+  <h2>📺 Farming Knowledge</h2>
+  <input placeholder="Search farming topics">
+  <p>Watch short videos about organic farming, pest control, and crop management.</p>
+
+  <!-- EMBEDDED VIDEO FRAMES -->
+  <iframe src="https://www.youtube.com/embed/4U4Zr2VxwLo"></iframe>
+  <iframe src="https://www.youtube.com/embed/Fa3kSxVhct0"></iframe>
+  <iframe src="https://www.youtube.com/embed/nFq3CYNcZno"></iframe>
+  <iframe src="https://www.youtube.com/embed/1uG5IexQaJg"></iframe>
+  <iframe src="https://www.youtube.com/embed/T0WlBh0ljzE"></iframe>
+</section>
+
+<!-- ALERTS PAGE -->
+<section id="alerts" class="page">
+  <h2>🌦 Weather & Water Alerts</h2>
+  <button onclick="getWeather()">Check Weather</button>
+  <p id="weatherData"></p>
+  <h3>🚰 Canal Updates</h3>
+  <ul>
+    <li>SRSP Canal – Water released</li>
+    <li>Kakatiya Canal – Expected in 2 days</li>
+    <li>Godavari Canal – Low flow</li>
+    <li>Indira Sagar – Full capacity</li>
+    <li>Prakasam Barrage – Moderate</li>
+    <li>Hussain Sagar – Maintenance ongoing</li>
+  </ul>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Agro Assist | Made with ❤️ for Farmers</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
