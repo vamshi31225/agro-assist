@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8">
 <title>Agro Assist</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,50 +11,55 @@
 
 <!-- HEADER SECTION -->
 <header>
-  <h1>🌾 AGRO ASSIST</h1>
-  <p>Smart Farming Support System</p>
+  <h1 data-i18n="agro_assist">🌾 AGRO ASSIST</h1>
+  <p data-i18n="smart_farming_support_system">Smart Farming Support System</p>
 </header>
 
 <!-- NAVIGATION -->
 <nav>
-  <button onclick="showPage('login')">Login</button>
-  <button onclick="showPage('ai')">AI Crop</button>
-  <button onclick="showPage('schemes')">Schemes</button>
-  <button onclick="showPage('market')">Market</button>
-  <button onclick="showPage('tractors')">Tractors</button>
-  <button onclick="showPage('videos')">Videos</button>
-  <button onclick="showPage('alerts')">Alerts</button>
-</nav>
+  <button onclick="showPage('login')" data-i18n="login">Login</button>
+  <button onclick="showPage('ai')" data-i18n="ai_crop">AI Crop</button>
+  <button onclick="showPage('schemes')" data-i18n="schemes_1">Schemes</button>
+  <button onclick="showPage('market')" data-i18n="market">Market</button>
+  <button onclick="showPage('tractors')" data-i18n="tractors">Tractors</button>
+  <button onclick="showPage('videos')" data-i18n="videos">Videos</button>
+  <button onclick="showPage('alerts')" data-i18n="alerts">Alerts</button>
+
+            <select class="langSwitcher" onchange="switchLanguage(this.value)" style="margin-left:15px; padding:6px 12px; border-radius:5px; background:#fff; color:#2e7d32; border:1px solid #2e7d32; font-weight:bold; cursor:pointer;">
+                <option value="en">EN</option>
+                <option value="te">తెలుగు</option>
+            </select>
+        </nav>
 
 <!-- LOGIN PAGE -->
 <section id="login" class="page active threeD-bg">
   <div class="login-box glass">
-    <h2>🌾 Agro Assist</h2>
-    <p class="subtitle">Smart Farming Begins Here</p>
-    <input type="text" placeholder="Username">
-    <input type="password" placeholder="Password">
-    <button class="glow-btn" onclick="showPage('ai')">Login</button>
+    <h2 data-i18n="agro_assist_1">🌾 Agro Assist</h2>
+    <p class="subtitle" data-i18n="smart_farming_begins_here">Smart Farming Begins Here</p>
+    <input type="text" placeholder="Username" data-i18n-placeholder="username_ph">
+    <input type="password" placeholder="Password" data-i18n-placeholder="password_ph">
+    <button class="glow-btn" onclick="showPage('ai')" data-i18n="login">Login</button>
   </div>
 </section>
 
 <!-- AI CROP RECOMMENDATION PAGE -->
 <section id="ai" class="page">
-  <h2>🌱 AI Crop Recommendation</h2>
-  <p>Use this tool to get smart suggestions for your farm.</p>
-  <label>Season</label>
+  <h2 data-i18n="ai_crop_recommendation">🌱 AI Crop Recommendation</h2>
+  <p data-i18n="use_this_tool_to_get_smart_sug">Use this tool to get smart suggestions for your farm.</p>
+  <label data-i18n="season">Season</label>
   <select id="season">
     <option>Kharif</option>
     <option>Rabi</option>
     <option>Zaid</option>
   </select>
-  <label>Water Source</label>
+  <label data-i18n="water_source">Water Source</label>
   <select id="water">
     <option>Borewell</option>
     <option>Canal</option>
     <option>Bhavi</option>
   </select>
-  <input id="history" placeholder="Previous Crop">
-  <button onclick="suggestCrop()">Suggest Crop</button>
+  <input id="history" placeholder="Previous Crop" data-i18n-placeholder="previous_crop_ph">
+  <button onclick="suggestCrop()" data-i18n="suggest_crop">Suggest Crop</button>
 
   <!-- RESULTS AREA -->
   <div id="cropResult" class="result-box">
@@ -65,121 +68,121 @@
 
   <!-- MULTIPLE EXAMPLE CROP CARDS TO INCREASE LINE COUNT -->
   <div class="card">
-    <h3>Rice (Kharif)</h3>
-    <p>Profit: ₹50,000 – ₹70,000</p>
-    <p>Water Requirement: High</p>
+    <h3 data-i18n="rice_kharif">Rice (Kharif)</h3>
+    <p data-i18n="profit_50_000_70_000">Profit: ₹50,000 – ₹70,000</p>
+    <p data-i18n="water_requirement_high">Water Requirement: High</p>
   </div>
   <div class="card">
-    <h3>Wheat (Rabi)</h3>
-    <p>Profit: ₹40,000 – ₹60,000</p>
-    <p>Water Requirement: Medium</p>
+    <h3 data-i18n="wheat_rabi">Wheat (Rabi)</h3>
+    <p data-i18n="profit_40_000_60_000">Profit: ₹40,000 – ₹60,000</p>
+    <p data-i18n="water_requirement_medium">Water Requirement: Medium</p>
   </div>
   <div class="card">
-    <h3>Maize (Zaid)</h3>
-    <p>Profit: ₹30,000 – ₹45,000</p>
-    <p>Water Requirement: Low</p>
+    <h3 data-i18n="maize_zaid">Maize (Zaid)</h3>
+    <p data-i18n="profit_30_000_45_000">Profit: ₹30,000 – ₹45,000</p>
+    <p data-i18n="water_requirement_low">Water Requirement: Low</p>
   </div>
 </section>
 
 <!-- GOVERNMENT SCHEMES PAGE -->
 <section id="schemes" class="page">
-  <h2>🏦 Government Schemes</h2>
-  <p>Learn step by step how to apply for subsidies, bonuses, and insurance.</p>
+  <h2 data-i18n="government_schemes">🏦 Government Schemes</h2>
+  <p data-i18n="learn_step_by_step_how_to_appl">Learn step by step how to apply for subsidies, bonuses, and insurance.</p>
 
   <!-- SCHEME CARDS -->
   <div class="card">
-    <h3>PM-KISAN</h3>
+    <h3 data-i18n="pm_kisan">PM-KISAN</h3>
     <ol>
-      <li>Land owning farmer</li>
-      <li>Aadhar linked bank</li>
-      <li>₹6000 per year</li>
+      <li data-i18n="land_owning_farmer">Land owning farmer</li>
+      <li data-i18n="aadhar_linked_bank">Aadhar linked bank</li>
+      <li data-i18n="6000_per_year">₹6000 per year</li>
     </ol>
-    <a href="https://pmkisan.gov.in" target="_blank">Official Apply</a>
+    <a href="https://pmkisan.gov.in" target="_blank" data-i18n="official_apply">Official Apply</a>
   </div>
 
   <div class="card">
-    <h3>Pradhan Mantri Fasal Bima Yojana</h3>
+    <h3 data-i18n="pradhan_mantri_fasal_bima_yoja">Pradhan Mantri Fasal Bima Yojana</h3>
     <ol>
-      <li>Crop Insurance</li>
-      <li>Online registration</li>
-      <li>Premium varies by crop</li>
+      <li data-i18n="crop_insurance">Crop Insurance</li>
+      <li data-i18n="online_registration">Online registration</li>
+      <li data-i18n="premium_varies_by_crop">Premium varies by crop</li>
     </ol>
-    <a href="https://pmfby.gov.in" target="_blank">Official Apply</a>
+    <a href="https://pmfby.gov.in" target="_blank" data-i18n="official_apply">Official Apply</a>
   </div>
 
   <div class="card">
-    <h3>Soil Health Card Scheme</h3>
+    <h3 data-i18n="soil_health_card_scheme">Soil Health Card Scheme</h3>
     <ol>
-      <li>Soil testing for all plots</li>
-      <li>Recommendations for fertilizers</li>
-      <li>Online form available</li>
+      <li data-i18n="soil_testing_for_all_plots">Soil testing for all plots</li>
+      <li data-i18n="recommendations_for_fertilizer">Recommendations for fertilizers</li>
+      <li data-i18n="online_form_available">Online form available</li>
     </ol>
-    <a href="https://soilhealth.dac.gov.in" target="_blank">Official Apply</a>
+    <a href="https://soilhealth.dac.gov.in" target="_blank" data-i18n="official_apply">Official Apply</a>
   </div>
 
   <div class="card">
-    <h3>Kisan Credit Card (KCC)</h3>
+    <h3 data-i18n="kisan_credit_card_kcc">Kisan Credit Card (KCC)</h3>
     <ol>
-      <li>Loans up to ₹3 lakhs</li>
-      <li>Low interest rate</li>
-      <li>Can be used for seeds & fertilizers</li>
+      <li data-i18n="loans_up_to_3_lakhs">Loans up to ₹3 lakhs</li>
+      <li data-i18n="low_interest_rate">Low interest rate</li>
+      <li>Can be used for seeds &amp; fertilizers</li>
     </ol>
-    <a href="https://www.rbi.org.in" target="_blank">Official Apply</a>
+    <a href="https://www.rbi.org.in" target="_blank" data-i18n="official_apply">Official Apply</a>
   </div>
 </section>
 
 <!-- MARKET PAGE -->
 <section id="market" class="page">
-  <h2>🌾 Seeds & Fertilizers</h2>
-  <p>Compare prices across multiple shops near you.</p>
+  <h2>🌾 Seeds &amp; Fertilizers</h2>
+  <p data-i18n="compare_prices_across_multiple">Compare prices across multiple shops near you.</p>
 
   <table>
-    <tr><th>Shop</th><th>Product</th><th>Price</th></tr>
-    <tr><td>Agro Seeds</td><td>Rice Seed</td><td>₹1200</td></tr>
-    <tr><td>Green Grow</td><td>Urea</td><td>₹270</td></tr>
-    <tr><td>Farm Care</td><td>DAP</td><td>₹1350</td></tr>
-    <tr><td>Agro Seeds</td><td>Wheat Seed</td><td>₹1000</td></tr>
-    <tr><td>Green Grow</td><td>Muriate of Potash</td><td>₹300</td></tr>
-    <tr><td>Farm Care</td><td>Superphosphate</td><td>₹1400</td></tr>
-    <tr><td>Agro Seeds</td><td>Millet Seed</td><td>₹900</td></tr>
-    <tr><td>Green Grow</td><td>Potash</td><td>₹320</td></tr>
-    <tr><td>Farm Care</td><td>NPK Fertilizer</td><td>₹1250</td></tr>
-  </table>
+    <tbody><tr><th data-i18n="shop">Shop</th><th data-i18n="product">Product</th><th data-i18n="price">Price</th></tr>
+    <tr><td data-i18n="agro_seeds">Agro Seeds</td><td data-i18n="rice_seed">Rice Seed</td><td data-i18n="1200">₹1200</td></tr>
+    <tr><td data-i18n="green_grow">Green Grow</td><td data-i18n="urea">Urea</td><td data-i18n="270">₹270</td></tr>
+    <tr><td data-i18n="farm_care">Farm Care</td><td data-i18n="dap">DAP</td><td data-i18n="1350">₹1350</td></tr>
+    <tr><td data-i18n="agro_seeds">Agro Seeds</td><td data-i18n="wheat_seed">Wheat Seed</td><td data-i18n="1000">₹1000</td></tr>
+    <tr><td data-i18n="green_grow">Green Grow</td><td data-i18n="muriate_of_potash">Muriate of Potash</td><td data-i18n="300">₹300</td></tr>
+    <tr><td data-i18n="farm_care">Farm Care</td><td data-i18n="superphosphate">Superphosphate</td><td data-i18n="1400">₹1400</td></tr>
+    <tr><td data-i18n="agro_seeds">Agro Seeds</td><td data-i18n="millet_seed">Millet Seed</td><td data-i18n="900">₹900</td></tr>
+    <tr><td data-i18n="green_grow">Green Grow</td><td data-i18n="potash">Potash</td><td data-i18n="320">₹320</td></tr>
+    <tr><td data-i18n="farm_care">Farm Care</td><td data-i18n="npk_fertilizer">NPK Fertilizer</td><td data-i18n="1250">₹1250</td></tr>
+  </tbody></table>
 </section>
 
 <!-- TRACTOR BOOKING PAGE -->
 <section id="tractors" class="page">
-  <h2>🚜 Tractor & Harvester Booking</h2>
-  <p>Book tractors and harvesters nearby using GPS-based info.</p>
+  <h2>🚜 Tractor &amp; Harvester Booking</h2>
+  <p data-i18n="book_tractors_and_harvesters_n">Book tractors and harvesters nearby using GPS-based info.</p>
 
   <!-- MULTIPLE TRACTOR CARDS -->
   <div class="card tractor-card">
-    <h3>🚜 Ramesh Tractor</h3>
-    <p>📍 3 km away</p>
-    <p>📞 9XXXXXXXXX</p>
+    <h3 data-i18n="ramesh_tractor">🚜 Ramesh Tractor</h3>
+    <p data-i18n="3_km_away">📍 3 km away</p>
+    <p data-i18n="9xxxxxxxxx">📞 9XXXXXXXXX</p>
   </div>
   <div class="card tractor-card">
-    <h3>🚜 Suresh Harvester</h3>
-    <p>📍 5 km away</p>
-    <p>📞 8XXXXXXXXX</p>
+    <h3 data-i18n="suresh_harvester">🚜 Suresh Harvester</h3>
+    <p data-i18n="5_km_away">📍 5 km away</p>
+    <p data-i18n="8xxxxxxxxx">📞 8XXXXXXXXX</p>
   </div>
   <div class="card tractor-card">
-    <h3>🚜 Mahesh Tractor</h3>
-    <p>📍 4 km away</p>
-    <p>📞 7XXXXXXXXX</p>
+    <h3 data-i18n="mahesh_tractor">🚜 Mahesh Tractor</h3>
+    <p data-i18n="4_km_away">📍 4 km away</p>
+    <p data-i18n="7xxxxxxxxx">📞 7XXXXXXXXX</p>
   </div>
   <div class="card tractor-card">
-    <h3>🚜 Harsha Harvester</h3>
-    <p>📍 6 km away</p>
-    <p>📞 6XXXXXXXXX</p>
+    <h3 data-i18n="harsha_harvester">🚜 Harsha Harvester</h3>
+    <p data-i18n="6_km_away">📍 6 km away</p>
+    <p data-i18n="6xxxxxxxxx">📞 6XXXXXXXXX</p>
   </div>
 </section>
 
 <!-- VIDEOS PAGE -->
 <section id="videos" class="page">
-  <h2>📺 Farming Knowledge</h2>
-  <input placeholder="Search farming topics">
-  <p>Watch short videos about organic farming, pest control, and crop management.</p>
+  <h2 data-i18n="farming_knowledge">📺 Farming Knowledge</h2>
+  <input placeholder="Search farming topics" data-i18n-placeholder="search_farming_topics_ph">
+  <p data-i18n="watch_short_videos_about_organ">Watch short videos about organic farming, pest control, and crop management.</p>
 
   <!-- EMBEDDED VIDEO FRAMES -->
   <iframe src="https://www.youtube.com/embed/4U4Zr2VxwLo"></iframe>
@@ -191,25 +194,28 @@
 
 <!-- ALERTS PAGE -->
 <section id="alerts" class="page">
-  <h2>🌦 Weather & Water Alerts</h2>
-  <button onclick="getWeather()">Check Weather</button>
+  <h2>🌦 Weather &amp; Water Alerts</h2>
+  <button onclick="getWeather()" data-i18n="check_weather">Check Weather</button>
   <p id="weatherData"></p>
-  <h3>🚰 Canal Updates</h3>
+  <h3 data-i18n="canal_updates">🚰 Canal Updates</h3>
   <ul>
-    <li>SRSP Canal – Water released</li>
-    <li>Kakatiya Canal – Expected in 2 days</li>
-    <li>Godavari Canal – Low flow</li>
-    <li>Indira Sagar – Full capacity</li>
-    <li>Prakasam Barrage – Moderate</li>
-    <li>Hussain Sagar – Maintenance ongoing</li>
+    <li data-i18n="srsp_canal_water_released">SRSP Canal – Water released</li>
+    <li data-i18n="kakatiya_canal_expected_in_2_d">Kakatiya Canal – Expected in 2 days</li>
+    <li data-i18n="godavari_canal_low_flow">Godavari Canal – Low flow</li>
+    <li data-i18n="indira_sagar_full_capacity">Indira Sagar – Full capacity</li>
+    <li data-i18n="prakasam_barrage_moderate">Prakasam Barrage – Moderate</li>
+    <li data-i18n="hussain_sagar_maintenance_ongo">Hussain Sagar – Maintenance ongoing</li>
   </ul>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <p>© 2026 Agro Assist | Made with ❤️ for Farmers</p>
+  <p data-i18n="2026_agro_assist_made_with_fo">© 2026 Agro Assist | Made with ❤️ for Farmers</p>
 </footer>
 
 <script src="code.js"></script>
-</body>
-</html>
+
+
+
+    <script src="i18n.js"></script>
+</body></html>

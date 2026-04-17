@@ -1,0 +1,116 @@
+<html lang="en"><head></head><body>﻿
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO &amp; Startup Connect | Agro Assist</title>
+    <link rel="stylesheet" href="css.css">
+    <style>
+        .org-card {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .org-logo {
+            font-size: 3rem;
+            margin-right: 20px;
+            background: #f1f8e9;
+            padding: 20px;
+            border-radius: 50%;
+            border: 2px solid #2e7d32;
+        }
+
+        .org-details h3 {
+            margin: 0 0 10px 0;
+            color: #2e7d32;
+        }
+
+        .apply-btn {
+            background: #f57c00;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .apply-btn:hover {
+            background: #ef6c00;
+        }
+    </style>
+
+
+
+
+    <header>
+        <h1> NGO &amp; Startup Connect</h1>
+        <p data-i18n="apply_for_grants_tools_and_par">Apply for grants, tools, and participate in developmental campaigns</p>
+    </header>
+
+    <nav>
+        <a href="index.html" data-i18n="home">Home</a>
+        <a href="dashboard.html" data-i18n="dashboard">Dashboard</a>
+        <a href="advisory.html" data-i18n="crop_advisory">Crop Advisory</a>
+        <a href="schemes.html" data-i18n="schemes_1">Schemes</a>
+        <a href="contact.html" data-i18n="contact_1">Contact</a>
+    
+            <select class="langSwitcher" onchange="switchLanguage(this.value)" style="margin-left:15px; padding:6px 12px; border-radius:5px; background:#fff; color:#2e7d32; border:1px solid #2e7d32; font-weight:bold; cursor:pointer;">
+                <option value="en">EN</option>
+                <option value="te">తెలుగు</option>
+            </select>
+        </nav>
+
+    <div class="container">
+
+        <h2 style="margin-bottom: 20px;">Available Grants &amp; Support Programs</h2>
+
+        <div class="org-card">
+            <div class="org-logo"></div>
+            <div class="org-details">
+                <h3 data-i18n="agrivikas_foundation_ngo">AgriVikas Foundation (NGO)</h3>
+                <p><strong>Offer:</strong> Free distribution of High-Yielding Variety (HYV) tomato seeds for drought-prone areas.</p>
+                <p><strong>Eligibility:</strong> Marginal farmers (&lt; 2 acres)</p>
+                <button class="apply-btn" onclick="alert('Your application for HYV seeds is submitted.')" data-i18n="apply_for_seeds">Apply for Seeds</button>
+            </div>
+        </div>
+
+        <div class="org-card">
+            <div class="org-logo"></div>
+            <div class="org-details">
+                <h3 data-i18n="farmtech_solutions_startup">FarmTech Solutions (Startup)</h3>
+                <p><strong>Offer:</strong> 50% discount on initial soil testing and aerial drone survey using our new AI platform.</p>
+                <p><strong>Eligibility:</strong> Farmers looking to modernize operations.</p>
+                <button class="apply-btn" onclick="alert('Redirecting to FarmTech partner portal...')" data-i18n="claim_discount">Claim Discount</button>
+            </div>
+        </div>
+
+        <div class="org-card">
+            <div class="org-logo"></div>
+            <div class="org-details">
+                <h3 data-i18n="jal_rakshak_trust_ngo">Jal Rakshak Trust (NGO)</h3>
+                <p><strong>Offer:</strong> Rainwater harvesting pit construction funding (up to â‚¹20,000).</p>
+                <p><strong>Eligibility:</strong> Farmers in red-alert groundwater zones.</p>
+                <button class="apply-btn" onclick="alert('Application sent to Jal Rakshak Trust. They will contact you.')" data-i18n="apply_for_funding">Apply for Funding</button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>Collaborating for Better Harvests </footer>
+
+
+
+
+
+
+
+
+    <script src="i18n.js"></script>
+</body></html>

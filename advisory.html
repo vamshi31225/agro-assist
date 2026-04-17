@@ -1,0 +1,77 @@
+<html lang="en"><head></head><body>﻿
+
+
+
+    <meta charset="UTF-8">
+    <title>Crop Advisory</title>
+    <link rel="stylesheet" href="css.css">
+
+
+
+
+    <header>
+        <h1 data-i18n="crop_advisory"> Crop Advisory</h1>
+    </header>
+
+    <nav>
+        <a href="index.html" data-i18n="home">Home</a>
+        <a href="dashboard.html" data-i18n="dashboard">Dashboard</a>
+        <a href="advisory.html" data-i18n="crop_advisory">Crop Advisory</a>
+        <a href="schemes.html" data-i18n="schemes_1">Schemes</a>
+        <a href="booking.html" data-i18n="equipment_booking">Equipment Booking</a>
+
+        <!-- âœ… Added Weather Page Link -->
+        <a href="weather.html" data-i18n="weather_1"> Weather</a>
+
+        <a href="contact.html" data-i18n="contact_1">Contact</a>
+    
+            <select class="langSwitcher" onchange="switchLanguage(this.value)" style="margin-left:15px; padding:6px 12px; border-radius:5px; background:#fff; color:#2e7d32; border:1px solid #2e7d32; font-weight:bold; cursor:pointer;">
+                <option value="en">EN</option>
+                <option value="te">తెలుగు</option>
+            </select>
+        </nav>
+
+    <div class="container">
+
+        <label data-i18n="soil_type">Soil Type</label>
+        <select id="soil">
+            <option value="">Select</option>
+            <option>Black</option>
+            <option>Red</option>
+            <option>Sandy</option>
+            <option>Loamy</option>
+        </select>
+
+        <label data-i18n="season">Season</label>
+        <select id="season">
+            <option value="">Select</option>
+            <option>Kharif</option>
+            <option>Rabi</option>
+            <option>Zaid</option>
+        </select>
+
+        <label data-i18n="water_availability">Water Availability</label>
+        <select id="water">
+            <option value="">Select</option>
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+        </select>
+
+        <button onclick="getAdvice()" data-i18n="get_advice">Get Advice</button>
+
+        <div id="result" class="card" style="display:none"></div>
+
+    </div>
+
+    <footer>Happy Farming </footer>
+
+    <script src="script.js"></script>
+
+
+
+
+
+
+    <script src="i18n.js"></script>
+</body></html>

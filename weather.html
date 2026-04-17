@@ -1,0 +1,369 @@
+<html><head></head><body>﻿
+
+
+
+<title>Weather Report</title>
+
+<link rel="stylesheet" href="css.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<style>
+
+body{
+margin:0;
+overflow:hidden;
+font-family:Arial;
+color:white;
+background:black;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+h1{
+text-align:center;
+margin-top:40px;
+font-size:42px;
+}
+
+#weatherBox{
+width:380px;
+margin:auto;
+margin-top:70px;
+padding:25px;
+border-radius:18px;
+background:rgba(0,0,0,0.45);
+backdrop-filter:blur(12px);
+text-align:center;
+font-size:18px;
+box-shadow:0 0 40px rgba(0,0,0,0.6);
+}
+
+</style>
+
+
+
+
+
+<h1 data-i18n="weather_report"> Weather Report</h1>
+
+<div id="weatherBox">
+<div id="weather">Loading weather...</div>
+</div>
+
+<script src="weather.js"></script>
+
+<script>
+
+/* SCENE */
+
+const scene = new THREE.Scene();
+
+scene.fog = new THREE.FogExp2(0x87ceeb,0.0008);
+
+/* CAMERA */
+
+const camera = new THREE.PerspectiveCamera(
+65,
+window.innerWidth/window.innerHeight,
+1,
+20000
+);
+
+camera.position.set(0,200,800);
+
+/* RENDERER */
+
+const renderer = new THREE.WebGLRenderer({antialias:true});
+
+renderer.setSize(window.innerWidth,window.innerHeight);
+
+renderer.setPixelRatio(window.devicePixelRatio);
+
+document.body.appendChild(renderer.domElement);
+
+/* LIGHTS */
+
+const ambient = new THREE.AmbientLight(0xffffff,0.7);
+
+scene.add(ambient);
+
+const sunLight = new THREE.DirectionalLight(0xfff4d6,1.4);
+
+sunLight.position.set(300,400,200);
+
+scene.add(sunLight);
+
+/* SKY DOME */
+
+const skyGeo = new THREE.SphereGeometry(6000,32,32);
+
+const skyMat = new THREE.MeshBasicMaterial({
+color:0x87ceeb,
+side:THREE.BackSide
+});
+
+const sky = new THREE.Mesh(skyGeo,skyMat);
+
+scene.add(sky);
+
+/* SUN */
+
+const sunGeo = new THREE.SphereGeometry(120,32,32);
+
+const sunMat = new THREE.MeshBasicMaterial({
+color:0xffd95c
+});
+
+const sun = new THREE.Mesh(sunGeo,sunMat);
+
+sun.position.set(500,400,-900);
+
+scene.add(sun);
+
+/* SUN HALO */
+
+const haloGeo = new THREE.SphereGeometry(200,32,32);
+
+const haloMat = new THREE.MeshBasicMaterial({
+color:0xffeaa0,
+transparent:true,
+opacity:0.3
+});
+
+const halo = new THREE.Mesh(haloGeo,haloMat);
+
+sun.add(halo);
+
+/* CLOUDS */
+
+const cloudParticles=[];
+
+const loader=new THREE.TextureLoader();
+
+loader.load(
+"https://threejs.org/examples/textures/sprites/cloud.png",
+function(texture){
+
+const cloudGeo=new THREE.PlaneGeometry(900,900);
+
+const cloudMat=new THREE.MeshLambertMaterial({
+map:texture,
+transparent:true,
+depthWrite:false
+});
+
+for(let i=0;i<100;i++){
+
+const cloud=new THREE.Mesh(cloudGeo,cloudMat);
+
+cloud.position.set(
+Math.random()*2000-1000,
+600,
+Math.random()*2000-1500
+);
+
+cloud.rotation.x=1.16;
+cloud.rotation.z=Math.random()*Math.PI;
+
+cloud.material.opacity=0.6;
+
+scene.add(cloud);
+
+cloudParticles.push(cloud);
+
+}
+
+}
+);
+
+/* STARS */
+
+const starGeo = new THREE.BufferGeometry();
+
+const starVertices=[];
+
+for(let i=0;i<10000;i++){
+
+starVertices.push(
+Math.random()*8000-4000,
+Math.random()*8000-4000,
+Math.random()*8000-4000
+);
+
+}
+
+starGeo.setAttribute(
+"position",
+new THREE.Float32BufferAttribute(starVertices,3)
+);
+
+const starMat = new THREE.PointsMaterial({
+color:0xffffff,
+size:2
+});
+
+const stars = new THREE.Points(starGeo,starMat);
+
+scene.add(stars);
+
+/* ATMOSPHERE PARTICLES */
+
+const particleGeo=new THREE.BufferGeometry();
+
+const particleVertices=[];
+
+for(let i=0;i<5000;i++){
+
+particleVertices.push(
+Math.random()*3000-1500,
+Math.random()*3000-1500,
+Math.random()*3000-1500
+);
+
+}
+
+particleGeo.setAttribute(
+"position",
+new THREE.Float32BufferAttribute(particleVertices,3)
+);
+
+const particleMat=new THREE.PointsMaterial({
+color:0xffffff,
+size:1.5
+});
+
+const particles=new THREE.Points(
+particleGeo,
+particleMat
+);
+
+scene.add(particles);
+
+/* RAIN SYSTEM */
+
+const rainGeo = new THREE.BufferGeometry();
+
+const rainVertices=[];
+
+for(let i=0;i<8000;i++){
+
+rainVertices.push(
+Math.random()*2000-1000,
+Math.random()*2000,
+Math.random()*2000-1000
+);
+
+}
+
+rainGeo.setAttribute(
+"position",
+new THREE.Float32BufferAttribute(rainVertices,3)
+);
+
+const rainMat = new THREE.PointsMaterial({
+color:0xaaaaaa,
+size:1
+});
+
+const rain = new THREE.Points(rainGeo,rainMat);
+
+scene.add(rain);
+
+/* LIGHTNING */
+
+let lightningTimer=0;
+
+/* CAMERA MOTION */
+
+let angle=0;
+
+/* ANIMATION */
+
+function animate(){
+
+requestAnimationFrame(animate);
+
+/* CLOUD MOTION */
+
+cloudParticles.forEach(c=>{
+c.rotation.z -=0.0004;
+});
+
+/* PARTICLES */
+
+particles.rotation.y +=0.0003;
+
+/* RAIN FALL */
+
+const rainPos = rain.geometry.attributes.position.array;
+
+for(let i=1;i<rainPos.length;i+=3){
+
+rainPos[i] -=20;
+
+if(rainPos[i] < -200){
+rainPos[i] = 2000;
+}
+
+}
+
+rain.geometry.attributes.position.needsUpdate = true;
+
+/* LIGHTNING FLASH */
+
+lightningTimer++;
+
+if(lightningTimer>200){
+
+sunLight.intensity=5;
+
+setTimeout(()=>{
+sunLight.intensity=1.4;
+},80);
+
+lightningTimer=0;
+
+}
+
+/* CAMERA FLOAT */
+
+angle +=0.0006;
+
+camera.position.x=Math.sin(angle)*120;
+camera.position.y=200+Math.sin(angle*0.5)*40;
+
+camera.lookAt(scene.position);
+
+renderer.render(scene,camera);
+
+}
+
+animate();
+
+/* RESIZE */
+
+window.addEventListener("resize",()=>{
+
+camera.aspect=window.innerWidth/window.innerHeight;
+
+camera.updateProjectionMatrix();
+
+renderer.setSize(window.innerWidth,window.innerHeight);
+
+});
+
+</script>
+
+
+
+
+
+
+    <script src="i18n.js"></script>
+</body></html>

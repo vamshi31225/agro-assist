@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Dashboard | Agro Assist</title>
+    <link rel="stylesheet" href="css.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .dash-card {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid transparent;
+        }
+
+        .dash-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.2);
+            border-color: #2e7d32;
+        }
+
+        .dash-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .dash-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .dash-desc {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #2e7d32;
+            color: white;
+            border-radius: 12px;
+        }
+
+        .voice-section {
+            background: #f1f8e9;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 2px dashed #4caf50;
+        }
+        
+        #voiceBtn {
+            background: #d32f2f;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px auto;
+            cursor: pointer;
+            border: none;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s, background 0.3s;
+        }
+        
+        #voiceBtn:hover {
+            transform: scale(1.1);
+            background: #b71c1c;
+        }
+        
+        #voiceBtn.recording {
+            animation: pulse 1.5s infinite;
+            background: #f44336;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(244, 67, 54, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0); }
+        }
+
+        .sms-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #1b5e20;
+        }
+
+        /* Added for Icon Styling & Hover Effect */
+        .dash-icon i {
+            font-size: 40px;
+            color: #2e7d32;
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .dash-card:hover .dash-icon i {
+            transform: scale(1.15);
+            text-shadow: 0 4px 10px rgba(46, 125, 50, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1 data-i18n="dashboardTitle"> Agro Assist Dashboard</h1>
+        <p data-i18n="welcomeMsg">Welcome back, Farmer! Your smart farming hub.</p>
+    </header>
+
+    <nav>
+        <a href="index.html" data-i18n="logout">Logout</a>
+        <a href="dashboard.html" data-i18n="dashboard">Dashboard</a>
+        <select id="langSwitcher" onchange="switchLanguage(this.value)" style="margin-left:15px; padding:6px 12px; border-radius:5px; background:#fff; color:#2e7d32; border:1px solid #2e7d32; font-weight:bold; cursor:pointer;">
+            <option value="en">EN</option>
+            <option value="te">తెలుగు</option>
+        </select>
+    </nav>
+
+    <div class="container" style="max-width: 1200px;">
+        
+        <!-- Voice-to-Text Input Section -->
+        <div class="voice-section">
+            <h3 data-i18n="voiceTitle"> Voice Assistant</h3>
+            <p data-i18n="voiceDesc">Select your language, click the mic, and speak clearly (e.g., "Mandi Prices")</p>
+            
+            <div style="display: flex; gap: 10px; max-width: 500px; margin: 0 auto;">
+                <input type="text" id="aiQueryInput" data-voice="true" data-process-callback="processVoiceQuery" placeholder="What do you need help with?" style="flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem;">
+                <button onclick="processVoiceQuery()" style="background: #2e7d32; color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Ask</button>
+            </div>
+
+            <p id="voiceResult" style="font-weight: bold; color: #2e7d32; margin-top: 10px; min-height: 24px;">...</p>
+        </div>
+
+        <!-- Offline SMS Integration Toggle -->
+        <div style="text-align: right; margin-bottom: 20px;">
+            <div class="sms-toggle">
+                <span data-i18n="offlineSms"> Enable Offline SMS Alerts (No Internet needed)</span>
+                <input type="checkbox" id="smsToggle" checked style="width: 20px; height: 20px; cursor: pointer;">
+            </div>
+        </div>
+
+        <!-- AI DECISION ASSISTANT SECTION -->
+        <div class="ai-recommendations-section" style="background: #e8f5e9; padding: 25px; border-radius: 12px; margin-bottom: 30px; border-left: 5px solid #2e7d32; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+            <h3 style="color: #1b5e20; margin-top: 0; display: flex; align-items: center; gap: 10px; font-size: 1.3rem;">
+                <i class="fa-solid fa-lightbulb" style="color: #fbc02d; text-shadow: 0 2px 5px rgba(251,192,45,0.4);"></i> 
+                Today's Recommendations
+            </h3>
+            <div id="recommendationsList" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
+                <p style="color: #666; font-style: italic;">🧠 Analyzing weather, market, and crop data...</p>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- 1. Market Place (Owners) -->
+            <a href="marketplace.html" class="dash-card">
+                <div class="dash-icon"><i class="fa-solid fa-tractor"></i></div>
+                <div class="dash-title" data-i18n="ownerMarketplace">Owner Marketplace</div>
+                <div class="dash-desc" data-i18n="ownerMarketplaceDesc">Register vehicles & rent out tractors/harvesters</div>
+            </a>
+
+            <!-- 2. Booking (Farmers) -->
+            <a href="booking.html" class="dash-card">
+                <div class="dash-icon"><i class="fa-solid fa-location-dot"></i></div>
+                <div class="dash-title" data-i18n="gpsBooking">GPS Equipment Booking</div>
+                <div class="dash-desc" data-i18n="gpsBookingDesc">Locate and book nearby equipment instantly</div>
+            </a>
+
+            <!-- 3. Advisory -->
+            <a href="advisory.html" class="dash-card">
+                <div class="dash-icon"><i class="fa-solid fa-seedling"></i></div>
+                <div class="dash-title" data-i18n="cropAdvisory">Crop Advisory</div>
+                <div class="dash-desc" data-i18n="cropAdvisoryDesc">Get personalized recommendations based on soil</div>
+            </a>
+
+            <!-- 4. Disease Detection -->
+            <a href="disease.html" class="dash-card">
+                <div class="dash-icon"><i class="fa-solid fa-robot"></i></div>
+                <div class="dash-title" data-i18n="aiCropDoctor">AI Crop Doctor</div>
+                <div class="dash-desc" data-i18n="aiCropDoctorDesc">Upload a photo to detect crop diseases</div>
+            </a>
+
+            <!-- 5. Mandi Prices -->
+            <a href="mandi.html" class="dash-card">
+                <div class="dash-icon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                <div class="dash-title" data-i18n="mandiPrices">Live Mandi Prices</div>
+                <div class="dash-desc" data-i18n="mandiPricesDesc">Check local market rates for your crops</div>
+            </a>
+
+            <!-- 6. Loan & Subsidy -->
+            <a href="schemes.html" class="dash-card">
+                <div class="dash-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                <div class="dash-title" data-i18n="schemes">Loans & Subsidies</div>
+                <div class="dash-desc" data-i18n="schemesDesc">Calculate eligibility & explore government schemes</div>
+            </a>
+
+            <!-- 7. Legal & Advisory -->
+            <a href="legal.html" class="dash-card">
+                <div class="dash-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                <div class="dash-title" data-i18n="legal">Legal Support</div>
+                <div class="dash-desc" data-i18n="legalDesc">Land rights, contract help, and dispute resolution</div>
+            </a>
+
+            <!-- 8. Training & Tutorials -->
+            <a href="training.html" class="dash-card">
+                <div class="dash-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                <div class="dash-title" data-i18n="training">Training & Tutorials</div>
+                <div class="dash-desc" data-i18n="trainingDesc">Learn new techniques from experts and guides</div>
+            </a>
+
+            <!-- 9. NGO Collaboration -->
+            <a href="collab.html" class="dash-card">
+                <div class="dash-icon"><i class="fa-solid fa-handshake"></i></div>
+                <div class="dash-title" data-i18n="collab">NGO & Startup Connect</div>
+                <div class="dash-desc" data-i18n="collabDesc">Apply for grants, seeds, and community programs</div>
+            </a>
+
+            <!-- 10. Success Stories -->
+            <a href="stories.html" class="dash-card">
+                <div class="dash-icon"><i class="fa-solid fa-star"></i></div>
+                <div class="dash-title" data-i18n="stories">Success Stories</div>
+                <div class="dash-desc" data-i18n="storiesDesc">Read and share inspiring farmer achievements</div>
+            </a>
+
+            <!-- 11. Weather (Existing) -->
+            <a href="weather.html" class="dash-card">
+                <div class="dash-icon"><i class="fa-solid fa-cloud-sun"></i></div>
+                <div class="dash-title" data-i18n="weather">Weather Forecast</div>
+                <div class="dash-desc" data-i18n="weatherDesc">Get current and upcoming weather updates</div>
+            </a>
+
+            <!-- 12. Contact (Existing) -->
+            <a href="contact.html" class="dash-card">
+                <div class="dash-icon"><i class="fa-solid fa-headset"></i></div>
+                <div class="dash-title" data-i18n="contact">Help & Support</div>
+                <div class="dash-desc" data-i18n="contactDesc">Reach out for any assistance or inquiries</div>
+            </a>
+        </div>
+    </div>
+
+    <footer><span data-i18n="footer">Empowering Farmers, Enriching Lives</span></footer>
+
+    <script>
+        // Intelligent Voice Query Logic Processing
+        window.processVoiceQuery = function() {
+            const inputEl = document.getElementById('aiQueryInput');
+            const voiceResult = document.getElementById('voiceResult');
+            const transcript = inputEl.value.toLowerCase().trim();
+            if(!transcript) return;
+            
+            voiceResult.innerText = `Processing... You said: "${transcript}"`;
+            
+            // Smart Intent matching
+            setTimeout(() => {
+                let matched = false;
+                let targetUrl = '';
+                let responseMsg = '';
+
+                if (/weather|climate|today weather|వాతావరణం/.test(transcript)) {
+                    targetUrl = 'weather.html';
+                    responseMsg = 'Opening weather report. వాతావరణ నివేదిక తెరుస్తోంది.';
+                    matched = true;
+                } else if (/tractor|book|rent|ట్రాక్టర్|బుక్/.test(transcript)) {
+                    targetUrl = 'booking.html';
+                    responseMsg = 'Opening equipment booking. పరికర బుకింగ్ తెరుస్తోంది.';
+                    matched = true;
+                } else if (/market|mandi|price|crop price|ధరలు|మార్కెట్/.test(transcript)) {
+                    targetUrl = 'mandi.html';
+                    responseMsg = 'Opening market prices. మార్కెట్ ధరలు తెరుస్తోంది.';
+                    matched = true;
+                } else if (/disease|photo|crop doctor|plant problem|వ్యాధి|డాక్టర్/.test(transcript)) {
+                    targetUrl = 'disease.html';
+                    responseMsg = 'Opening crop doctor. పంట డాక్టర్ తెరుస్తోంది.';
+                    matched = true;
+                } else if (/loan|subsidy|money help|government scheme|రుణం|పథకం/.test(transcript)) {
+                    targetUrl = 'schemes.html';
+                    responseMsg = 'Opening government schemes. ప్రభుత్వ పథకాలు తెరుస్తోంది.';
+                    matched = true;
+                }
+
+                if (matched) {
+                    voiceResult.innerText = `Command recognized: "${transcript}"`;
+                    if(window.VoiceInputSystem) window.VoiceInputSystem.speak(responseMsg);
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 2000); // Small delay to play voice response
+                } else {
+                    voiceResult.innerText = `Command not recognized: "${transcript}" (Try 'Mandi' or 'Tractor')`;
+                    if(window.VoiceInputSystem) window.VoiceInputSystem.speak("Command not recognized. Please try again. దయచేసి మళ్లీ ప్రయత్నించండి.");
+                }
+            }, 500);
+        };
+
+        // SMS Toggle (Mock function)
+        document.getElementById('smsToggle').addEventListener('change', (e) => {
+            if (e.target.checked) {
+                alert("Offline SMS alerts activated! You will receive updates on your registered mobile number.");
+            } else {
+                alert("Offline SMS alerts deactivated.");
+            }
+        });
+
+        // ================= MULTILINGUAL SYSTEM =================
+        const preferredLang = localStorage.getItem('agroLang') || 'en';
+        
+        async function loadTranslations(lang) {
+            try {
+                const response = await fetch(`/locales/${lang}.json`);
+                if (!response.ok) throw new Error("Translation file not found. Falling back to default.");
+                const translations = await response.json();
+                
+                document.querySelectorAll("[data-i18n]").forEach(el => {
+                    const key = el.getAttribute("data-i18n");
+                    if (translations[key]) {
+                        // Check if it's preserving an internal icon (just in case), though we don't need to as we targeted direct text spans/divs.
+                        el.innerText = translations[key];
+                    }
+                });
+                
+                localStorage.setItem('agroLang', lang);
+                const switcher = document.getElementById("langSwitcher");
+                if (switcher) switcher.value = lang;
+                
+            } catch (error) {
+                console.error("Language Load Error:", error);
+                // Fallback to english translation if anything crashes to prevent broken state
+                if(lang !== 'en') loadTranslations('en');
+            }
+        }
+
+        function switchLanguage(lang) {
+            loadTranslations(lang);
+        }
+
+        // Initialize language on load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTranslations(preferredLang);
+        });
+
+    </script>
+    
+    <!-- Smart Notification System -->
+    <script src="notifications.js"></script>
+    
+    <!-- Unified Voice Interaction Module -->
+    <script src="voice.js"></script>
+
+    <!-- AI Decision Assistant Script -->
+    <script>
+        async function fetchDailyRecommendations() {
+            const container = document.getElementById('recommendationsList');
+            if(!container) return;
+            try {
+                const res = await fetch('/api/daily-recommendations');
+                if (!res.ok) throw new Error("API Error");
+                const data = await res.json();
+                
+                if (data.recommendations && data.recommendations.length > 0) {
+                    container.innerHTML = data.recommendations.map(rec => `
+                        <div style="display: flex; align-items: flex-start; gap: 15px; background: white; padding: 12px 20px; border-radius: 8px; border: 1px solid #c8e6c9; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+                            <span style="font-size: 1.5rem; line-height: 1;">${rec.icon}</span>
+                            <span style="font-size: 1.05rem; color: #333; font-weight: 500; flex: 1; align-self: center;">${rec.text}</span>
+                        </div>
+                    `).join('');
+                } else {
+                     container.innerHTML = `<p style="color: #666; margin-left: 10px;">No urgent recommendations for today.</p>`;
+                }
+            } catch (err) {
+                container.innerHTML = `<p style="color: #d32f2f; margin-left: 10px;">Unable to load smart recommendations at this time.</p>`;
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', fetchDailyRecommendations);
+    </script>
+
+</body>
+
+</html>
+
+

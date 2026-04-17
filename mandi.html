@@ -1,0 +1,204 @@
+<html lang="en"><head></head><body>﻿
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mandi Prices | Agro Assist</title>
+    <link rel="stylesheet" href="css.css">
+    <style>
+        .mandi-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .mandi-table th, .mandi-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .mandi-table th {
+            background-color: #2e7d32;
+            color: white;
+        }
+        
+        .mandi-table tr:hover {
+            background-color: #f1f8e9;
+        }
+        
+        .trend-up { color: green; font-weight: bold; }
+        .trend-down { color: red; font-weight: bold; }
+        .trend-stable { color: orange; font-weight: bold; }
+    </style>
+
+
+
+
+    <header>
+        <h1 data-i18n="live_mandi_prices"> Live Mandi Prices</h1>
+        <p data-i18n="check_real_time_crop_prices_in">Check real-time crop prices in your local markets</p>
+    </header>
+
+    <nav>
+        <a href="index.html" data-i18n="home">Home</a>
+        <a href="dashboard.html" data-i18n="dashboard">Dashboard</a>
+        <a href="advisory.html" data-i18n="crop_advisory">Crop Advisory</a>
+        <a href="schemes.html" data-i18n="schemes_1">Schemes</a>
+        <a href="contact.html" data-i18n="contact_1">Contact</a>
+    
+            <select class="langSwitcher" onchange="switchLanguage(this.value)" style="margin-left:15px; padding:6px 12px; border-radius:5px; background:#fff; color:#2e7d32; border:1px solid #2e7d32; font-weight:bold; cursor:pointer;">
+                <option value="en">EN</option>
+                <option value="te">తెలుగు</option>
+            </select>
+        </nav>
+
+    <div class="container">
+        
+        <!-- New Smart Market Section -->
+        <h2 id="smartTrendsTitle" style="margin-top: 10px; margin-bottom: 20px; color: #2e7d32; border-bottom: 2px solid #e8f5e9; padding-bottom: 5px;" data-i18n="smart_analytics_trends">Smart Analytics & Trends 📈</h2>
+        <div id="smartTrendsContainer" style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 30px;">
+             <!-- Dynamic Content Rendered Here via API -->
+        </div>
+
+        <div class="card" style="background: #e8f5e9;">
+            <label data-i18n="filter_by_location_mandi">Filter by Location / Mandi</label>
+            <select id="mandiFilter" onchange="filterMandi()">
+                <option value="all">All Markets</option>
+                <option value="hyderabad">Hyderabad (Bowenpally)</option>
+                <option value="pune">Pune (APMC)</option>
+                <option value="delhi">Delhi (Azadpur)</option>
+            </select>
+        </div>
+
+        <table class="mandi-table" id="pricesTable">
+            <thead>
+                <tr>
+                    <th data-i18n="commodity">Commodity</th>
+                    <th data-i18n="market_mandi">Market (Mandi)</th>
+                    <th data-i18n="min_price_quintal">Min Price (â‚¹/Quintal)</th>
+                    <th data-i18n="max_price_quintal">Max Price (â‚¹/Quintal)</th>
+                    <th data-i18n="trend">Trend</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="mandi-row" data-market="hyderabad">
+                    <td data-i18n="cotton">Cotton</td>
+                    <td data-i18n="hyderabad_bowenpally">Hyderabad (Bowenpally)</td>
+                    <td data-i18n="7_000">7,000</td>
+                    <td data-i18n="7_500">7,500</td>
+                    <td class="trend-up" data-i18n="2">â–² +2%</td>
+                </tr>
+                <tr class="mandi-row" data-market="hyderabad">
+                    <td data-i18n="red_gram_tur">Red Gram (Tur)</td>
+                    <td data-i18n="hyderabad_bowenpally">Hyderabad (Bowenpally)</td>
+                    <td data-i18n="9_500">9,500</td>
+                    <td data-i18n="10_200">10,200</td>
+                    <td class="trend-stable" data-i18n="0_2">- 0%</td>
+                </tr>
+                <tr class="mandi-row" data-market="pune">
+                    <td data-i18n="onion">Onion</td>
+                    <td data-i18n="pune_apmc">Pune (APMC)</td>
+                    <td data-i18n="1_200">1,200</td>
+                    <td data-i18n="1_800">1,800</td>
+                    <td class="trend-down" data-i18n="5">â–¼ -5%</td>
+                </tr>
+                <tr class="mandi-row" data-market="delhi">
+                    <td data-i18n="wheat">Wheat</td>
+                    <td data-i18n="delhi_azadpur">Delhi (Azadpur)</td>
+                    <td data-i18n="2_200">2,200</td>
+                    <td data-i18n="2_450">2,450</td>
+                    <td class="trend-up" data-i18n="1">â–² +1%</td>
+                </tr>
+                <tr class="mandi-row" data-market="pune">
+                    <td data-i18n="pomegranate">Pomegranate</td>
+                    <td data-i18n="pune_apmc">Pune (APMC)</td>
+                    <td data-i18n="8_000">8,000</td>
+                    <td data-i18n="12_000">12,000</td>
+                    <td class="trend-up" data-i18n="3">â–² +3%</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <footer>Smart Farming Analytics </footer>
+
+    <script>
+        // SMART MARKET TRENDS & PRICE TRACKING API LOGIC
+        async function fetchSmartMarketData() {
+            try {
+                const res = await fetch('/api/market-prices');
+                if (!res.ok) return; // Silent fail keeps static layout pristine
+                const data = await res.json();
+                
+                const container = document.getElementById('smartTrendsContainer');
+                container.innerHTML = '';
+                
+                data.forEach(item => {
+                    let trendIcon = '➖';
+                    let trendColor = 'orange';
+                    if (item.trend === 'up') { trendIcon = '📈'; trendColor = 'green'; }
+                    if (item.trend === 'down') { trendIcon = '📉'; trendColor = '#d32f2f'; }
+
+                    const historyBoxes = item.history.map((h, i) => {
+                       const height = Math.max(10, Math.min(40, (h / Math.max(...item.history)) * 40));
+                       return `<div title="Day ${i+1}: ₹${h}" style="background: ${trendColor}; width: 15px; height: ${height}px; border-radius: 2px;"></div>`;
+                    }).join('');
+
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.style.flex = '1 1 250px';
+                    card.style.borderTop = `4px solid ${trendColor}`;
+                    card.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <h3 style="margin: 0; color: #333;">${item.crop}</h3>
+                            <span style="background: #e0e0e0; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem;">${item.location}</span>
+                        </div>
+                        <h2 style="margin: 10px 0; color: #2e7d32;">₹${item.price}<span style="font-size: 1rem; color: #777;">/${item.unit}</span></h2>
+                        <div style="font-weight: bold; color: ${trendColor}; margin-bottom: 15px;">
+                            ${trendIcon} ${item.trendValue}
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <div style="font-size: 0.8rem; color: #888; margin-bottom: 5px;">Price History (Last 6 updates)</div>
+                            <div style="display: flex; align-items: flex-end; gap: 5px; height: 45px; border-bottom: 1px solid #ccc; padding-bottom: 2px;">
+                                ${historyBoxes}
+                            </div>
+                        </div>
+                        <div style="background: #f1f8e9; padding: 10px; border-radius: 5px; font-size: 0.9rem; color: #1b5e20; border-left: 3px solid #2e7d32; min-height: 40px; margin-top: auto;">
+                            🧠 <strong>Suggestion:</strong> ${item.suggestion}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch(e) { console.error("Market API Fallback triggered", e); }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+             fetchSmartMarketData();
+        });
+
+
+        function filterMandi() {
+            const filter = document.getElementById('mandiFilter').value;
+            const rows = document.querySelectorAll('.mandi-row');
+            
+            rows.forEach(row => {
+                if (filter === 'all' || row.dataset.market === filter) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+
+
+
+
+
+
+    <script src="i18n.js"></script>
+</body></html>

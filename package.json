@@ -1,0 +1,31 @@
+{
+  "name": "agro-assist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vamshi31225/agro-assist.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/vamshi31225/agro-assist/issues"
+  },
+  "homepage": "https://github.com/vamshi31225/agro-assist#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cheerio": "^1.2.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "mongoose": "^9.3.0",
+    "multer": "^2.1.1"
+  }
+}

@@ -1,0 +1,128 @@
+<html lang="en"><head></head><body>﻿
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal &amp; Advisory Support | Agro Assist</title>
+    <link rel="stylesheet" href="css.css">
+    <style>
+        .accordion {
+            background-color: #f1f8e9;
+            color: #2e7d32;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 18px;
+            font-weight: bold;
+            transition: 0.4s;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .active, .accordion:hover {
+            background-color: #c8e6c9;
+        }
+
+        .panel {
+            padding: 0 18px;
+            display: none;
+            background-color: white;
+            overflow: hidden;
+            border: 1px solid #c8e6c9;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+        }
+    </style>
+
+
+
+
+    <header>
+        <h1>âš–ï¸ Legal &amp; Advisory Support</h1>
+        <p data-i18n="know_your_rights_get_help_with">Know your rights, get help with contracts and dispute resolution.</p>
+    </header>
+
+    <nav>
+        <a href="index.html" data-i18n="home">Home</a>
+        <a href="dashboard.html" data-i18n="dashboard">Dashboard</a>
+        <a href="advisory.html" data-i18n="crop_advisory">Crop Advisory</a>
+        <a href="schemes.html" data-i18n="schemes_1">Schemes</a>
+        <a href="contact.html" data-i18n="contact_1">Contact</a>
+    
+            <select class="langSwitcher" onchange="switchLanguage(this.value)" style="margin-left:15px; padding:6px 12px; border-radius:5px; background:#fff; color:#2e7d32; border:1px solid #2e7d32; font-weight:bold; cursor:pointer;">
+                <option value="en">EN</option>
+                <option value="te">తెలుగు</option>
+            </select>
+        </nav>
+
+    <div class="container">
+
+        <h2> Legal Resources &amp; Guidance</h2>
+
+        <button class="accordion" data-i18n="land_rights_guidance">Land Rights Guidance</button>
+        <div class="panel">
+            <p><strong>1. Inheritance Laws:</strong> Under the Hindu Succession Act, daughters have equal rights to ancestral agricultural land.</p>
+            <p><strong>2. Tenancy Rights:</strong> If you are a tenant farmer, ensure your name is registered in the revenue records (Adangal/Pahani) to claim subsidies and crop insurance.</p>
+            <p><strong>3. Digitization of Land Records:</strong> Use your state's digital portal (e.g., Dharani in Telangana, Bhoomi in Karnataka) to verify your land titles and prevent fraud.</p>
+        </div>
+
+        <button class="accordion" data-i18n="farming_contract_help">Farming Contract Help</button>
+        <div class="panel">
+            <p><strong>What is Contract Farming?</strong> It's an agreement between a farmer and a buyer for the production and supply of agricultural products under forward agreements.</p>
+            <p><strong>Important Clauses to check:</strong></p>
+            <ul>
+                <li data-i18n="fixed_pre_agreed_price_regardl">Fixed pre-agreed price regardless of market fluctuations.</li>
+                <li data-i18n="clear_quality_standards_to_avo">Clear quality standards to avoid unfair rejection.</li>
+                <li data-i18n="penalty_clauses_for_delayed_pa">Penalty clauses for delayed payments from the buyer.</li>
+            </ul>
+        </div>
+
+        <button class="accordion" data-i18n="dispute_resolution_grievance">Dispute Resolution (Grievance)</button>
+        <div class="panel">
+            <p data-i18n="if_you_face_issues_with_land_g">If you face issues with land grabbing, non-payment by traders, or fake seeds/fertilizers:</p>
+            <ol>
+                <li><strong>Mandal Revenue Office (MRO):</strong> For land disputes.</li>
+                <li><strong>District Consumer Forum:</strong> For fake seeds or defective agricultural equipment.</li>
+                <li><strong>SDM / District Magistrate:</strong> For enforcing contract farming agreements under the new acts.</li>
+            </ol>
+        </div>
+
+        <div class="card" style="margin-top: 30px; text-align: center; border: 2px solid #2e7d32; background: #e8f5e9;">
+            <h3 data-i18n="need_expert_advice">Need Expert Advice?</h3>
+            <p data-i18n="connect_with_pro_bono_agricult">Connect with pro-bono agricultural lawyers and NGOs.</p>
+            <button onclick="alert('Our legal expert will call you on your registered number shortly.')" data-i18n="request_legal_call_back">Request Legal Call-back</button>
+        </div>
+
+    </div>
+
+    <footer>Justice for Farmers </footer>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
+        }
+    </script>
+
+
+
+
+
+
+
+    <script src="i18n.js"></script>
+</body></html>

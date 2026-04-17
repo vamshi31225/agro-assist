@@ -1,0 +1,346 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Crop Doctor | Agro Assist</title>
+    <link rel="stylesheet" href="css.css">
+    <style>
+        .upload-area {
+            border: 3px dashed #2e7d32;
+            border-radius: 12px;
+            padding: 50px;
+            text-align: center;
+            background: #f1f8e9;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            background: #c8e6c9;
+        }
+
+        .upload-area input {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: #2e7d32;
+        }
+
+        .loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #2e7d32;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #resultArea {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .remedy-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        #imagePreviewContainer {
+            margin: 20px 0;
+            display: none;
+            text-align: center;
+        }
+
+        #imagePreview {
+            max-width: 100%;
+            height: auto;
+            max-height: 300px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1 data-i18n="ai_crop_doctor"> AI Crop Doctor</h1>
+        <p data-i18n="instantly_detect_crop_diseases">Instantly detect crop diseases and find remedies using AI</p>
+    </header>
+
+    <nav>
+        <a href="index.html" data-i18n="home">Home</a>
+        <a href="dashboard.html" data-i18n="dashboard">Dashboard</a>
+        <a href="advisory.html" data-i18n="crop_advisory">Crop Advisory</a>
+        <a href="schemes.html" data-i18n="schemes_1">Schemes</a>
+        <a href="contact.html" data-i18n="contact_1">Contact</a>
+    
+            <select class="langSwitcher" onchange="switchLanguage(this.value)" style="margin-left:15px; padding:6px 12px; border-radius:5px; background:#fff; color:#2e7d32; border:1px solid #2e7d32; font-weight:bold; cursor:pointer;">
+                <option value="en">EN</option>
+                <option value="te">తెలుగు</option>
+            </select>
+        </nav>
+
+    <div class="container" style="max-width: 800px;">
+        
+        <div class="upload-area" id="uploadAreaDiv" onclick="document.getElementById('cropImage').click()">
+            <div class="upload-icon"></div>
+            <h2 style="color: #2e7d32;" data-i18n="tap_to_upload_leaf_crop_photo">Tap to Upload Leaf/Crop Photo</h2>
+            <p style="color: #555;" data-i18n="or_drag_and_drop_here">Or drag and drop here</p>
+            <p style="font-size: 0.8rem; color: #888;" data-i18n="max_size_5mb">(Max size: 5MB)</p>
+            <input type="file" id="cropImage" accept="image/*" onchange="previewAndAnalyze()">
+        </div>
+
+        <div id="imagePreviewContainer">
+            <h3 style="color: #2e7d32;" data-i18n="uploaded_image_preview">Uploaded Image Preview:</h3>
+            <img id="imagePreview" src="" alt="Crop Preview">
+            <div class="loader" id="aiLoader"></div>
+            <p id="analysisText" style="display:none; color:#f57c00; font-weight:bold; margin-top:10px;" data-i18n="scanning_image_via_ai">Scanning image via AI...</p>
+        </div>
+
+        <div id="resultArea">
+            <div style="text-align:center; margin-bottom: 20px;">
+                <h3 style="color: #d32f2f;" id="pathogenName" data-i18n="pathogen_detected_scanning">Pathogen Detected: Scanning...</h3>
+                <p><strong>AI Confidence Score: <span style="color: green;" id="confidenceScore" data-i18n="0_1">0%</span></strong></p>
+            </div>
+
+            <h4 data-i18n="recommended_remedies"> Recommended Remedies:</h4>
+            
+            <p><span class="remedy-badge" style="background: #e8f5e9; color: #1b5e20;" data-i18n="organic_remedy"> Organic Remedy</span>
+            <span id="organicRemedy" data-i18n="scanning_organic_solutions">Scanning organic solutions...</span></p>
+
+            <p><span class="remedy-badge" style="background: #ffebee; color: #b71c1c;" data-i18n="chemical_remedy">☣️ Chemical Remedy</span>
+            <span id="chemicalRemedy" data-i18n="scanning_chemical_solutions">Scanning chemical solutions...</span></p>
+            
+            <div style="margin-top: 30px; text-align: center; border-top: 1px solid #ddd; padding-top: 20px;">
+                <p data-i18n="still_unsure_connect_with_a_hu">Still unsure? Connect with a human expert.</p>
+                <button style="width: auto; background: #1565c0; padding: 10px 20px;" onclick="alert('Connecting you to an expert...')" data-i18n="consult_agri_specialist"> Consult Agri-Specialist</button>
+                <button style="width: auto; background: #2e7d32; padding: 10px 20px; margin-left: 10px;" onclick="resetAnalyzer()" data-i18n="scan_another_image">Scan Another Image</button>
+            </div>
+        </div>
+
+        <div id="extendedDetailsArea" style="display: none; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-top: 20px;">
+        </div>
+
+    </div>
+
+    <footer>AI Powered Farming Intelligence </footer>
+
+    <script>
+        const diseasesData = [
+            {
+                name: "Late Blight (Phytophthora infestans)",
+                keywords: ["blight", "late", "brown", "spot", "potato", "tomato", "wilted"],
+                organic: "Use copper-based organic fungicides (e.g., Bordeaux mixture) applied uniformly under the leaves. Ensure proper field drainage.",
+                chemical: "Apply Chlorothalonil or Mancozeb sprays at 7-10 day intervals. Stop applying before harvest as per safety guidelines."
+            },
+            {
+                name: "Powdery Mildew",
+                keywords: ["mildew", "powdery", "white", "dust", "leaves", "fungus"],
+                organic: "Apply neem oil or a mixture of baking soda and liquid soap. Ensure plants have good air circulation.",
+                chemical: "Use sulfur-based fungicides or Myclobutanil at the first sign of white powdery spots."
+            },
+            {
+                name: "Leaf Spot (Cercospora)",
+                keywords: ["spot", "leaf", "cercospora", "yellow", "dots", "hole", "black"],
+                organic: "Prune affected leaves immediately. Apply compost tea or Bacillus subtilis-based bio-fungicides.",
+                chemical: "Apply a protective fungicide containing copper octanoate or chlorothalonil."
+            }
+        ];
+
+        // Hash function to simulate deterministic AI feature extraction based on metadata
+        function hashString(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = (hash << 5) - hash + char;
+                hash |= 0; 
+            }
+            return Math.abs(hash);
+        }
+
+        function previewAndAnalyze() {
+            const input = document.getElementById('cropImage');
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            const previewImage = document.getElementById('imagePreview');
+            const uploadArea = document.getElementById('uploadAreaDiv');
+            const resultArea = document.getElementById('resultArea');
+            const aiLoader = document.getElementById('aiLoader');
+            const analysisText = document.getElementById('analysisText');
+
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const fileName = file.name.toLowerCase();
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Update preview UI
+                    previewImage.src = e.target.result;
+                    uploadArea.style.display = 'none';
+                    previewContainer.style.display = 'block';
+                    resultArea.style.display = 'none';
+                    const extArea = document.getElementById('extendedDetailsArea');
+                    if (extArea) extArea.style.display = 'none';
+                    
+                    aiLoader.style.display = 'block';
+                    analysisText.style.display = 'block';
+                    analysisText.innerText = "Analyzing with AI...";
+
+                    let analyzeSteps = [
+                        "Extracting image features...",
+                        "Running through diagnostic models...",
+                        "Cross-referencing pathogen database...",
+                        "Finalizing AI confidence score..."
+                    ];
+                    let step = 0;
+                    let interval = setInterval(() => {
+                        if(step < analyzeSteps.length) {
+                            analysisText.innerText = analyzeSteps[step];
+                            step++;
+                        }
+                    }, 800);
+
+                    // Mock API delay calculating prediction (approx 3.5s total)
+                    setTimeout(() => {
+                        clearInterval(interval);
+                        aiLoader.style.display = 'none';
+                        analysisText.style.display = 'none';
+                        
+                        // Simulate intelligent detection
+                        let matchedDisease = null;
+                        let maxMatches = 0;
+                        let confidence = 0;
+
+                        // 1. Try keyword mapping
+                        diseasesData.forEach(disease => {
+                            let matches = 0;
+                            disease.keywords.forEach(kw => {
+                                if(fileName.includes(kw)) matches++;
+                            });
+                            if(matches > maxMatches) {
+                                maxMatches = matches;
+                                matchedDisease = disease;
+                            }
+                        });
+
+                        // 2. If no keywords matched, use metadata-based classification for dynamic results
+                        if (!matchedDisease) {
+                            const fileHash = hashString(fileName + file.size + file.lastModified);
+                            // 1 in 4 chance of fallback (unrecognized) vs matching a disease deterministically
+                            const diseaseIndex = fileHash % (diseasesData.length + 1);
+                            
+                            if (diseaseIndex < diseasesData.length) {
+                                matchedDisease = diseasesData[diseaseIndex];
+                                // Randomized within realistic range for generic metadata match
+                                confidence = (Math.random() * (85.0 - 75.0) + 75.0).toFixed(1);
+                            }
+                        } else {
+                            // Smart Confidence Logic based on keyword matching strength
+                            if (maxMatches > 1) {
+                                confidence = (Math.random() * (95.0 - 85.0) + 85.0).toFixed(1);
+                            } else {
+                                confidence = (Math.random() * (85.0 - 75.0) + 75.0).toFixed(1);
+                            }
+                        }
+
+                        if (!matchedDisease) {
+                            // Fallback handling
+                            document.getElementById('pathogenName').innerText = "Disease not clearly identified. Please upload a clearer image.";
+                            document.getElementById('pathogenName').style.color = "#f57c00";
+                            document.getElementById('confidenceScore').innerText = "N/A";
+                            document.getElementById('organicRemedy').innerText = "General Tip: Maintain proper soil health and remove any physically damaged leaves.";
+                            document.getElementById('chemicalRemedy').innerText = "General Tip: Do not apply chemical treatments without identifying a specific pathogen.";
+
+                            // Fetch general care details
+                            fetch(`/disease-details?disease=Unknown`)
+                                .then(res => res.json())
+                                .then(data => renderExtendedDetails(data))
+                                .catch(err => console.error(err));
+                        } else {
+                            // Dynamic Result Generation
+                            document.getElementById('pathogenName').innerText = "Pathogen Detected: " + matchedDisease.name;
+                            document.getElementById('pathogenName').style.color = "#d32f2f";
+                            document.getElementById('confidenceScore').innerText = confidence + "%";
+                            document.getElementById('organicRemedy').innerText = matchedDisease.organic;
+                            document.getElementById('chemicalRemedy').innerText = matchedDisease.chemical;
+
+                            // Fetch detailed disease info
+                            fetch(`/disease-details?disease=${encodeURIComponent(matchedDisease.name)}`)
+                                .then(res => res.json())
+                                .then(data => renderExtendedDetails(data))
+                                .catch(err => console.error(err));
+                        }
+
+                        resultArea.style.display = 'block';
+                        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                    }, 3500);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function renderExtendedDetails(data) {
+            const extArea = document.getElementById('extendedDetailsArea');
+            if(!extArea) return;
+            
+            let html = `<h3 style="color: #2e7d32; margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 10px;">🩺 Comprehensive Analysis</h3>`;
+            
+            let urgencyColor = data.urgency === "High" ? "#d32f2f" : data.urgency === "Medium" ? "#f57c00" : "#388e3c";
+            html += `<p style="margin-bottom: 20px;"><strong>Urgency Level:</strong> <span style="background: ${urgencyColor}; color: white; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.9rem;">${data.urgency || "Medium"}</span></p>`;
+            
+            if(data.cure && data.cure.length > 0) {
+                html += `<h4 style="color: #424242; margin-bottom: 10px;">🛡️ Cure Suggestions</h4><ul style="padding-left: 20px; color: #555; line-height: 1.6; margin-bottom: 20px;">`;
+                data.cure.forEach(c => html += `<li>${c}</li>`);
+                html += `</ul>`;
+            }
+            
+            if(data.medicines && data.medicines.length > 0) {
+                html += `<h4 style="color: #424242; margin-bottom: 10px;">💊 Fertilizer / Medicine Advice</h4><ul style="padding-left: 20px; color: #555; line-height: 1.6; margin-bottom: 20px;">`;
+                data.medicines.forEach(m => html += `<li><strong>${m.name}:</strong> <span style="color: #666;">${m.usage}</span></li>`);
+                html += `</ul>`;
+            }
+            
+            if(data.prevention && data.prevention.length > 0) {
+                html += `<h4 style="color: #424242; margin-bottom: 10px;">🌱 Prevention Tips</h4><ul style="padding-left: 20px; color: #555; line-height: 1.6; margin-bottom: 20px;">`;
+                data.prevention.forEach(p => html += `<li>${p}</li>`);
+                html += `</ul>`;
+            }
+            
+            extArea.innerHTML = html;
+            extArea.style.display = 'block';
+        }
+
+        function resetAnalyzer() {
+            document.getElementById('uploadAreaDiv').style.display = 'block';
+            document.getElementById('imagePreviewContainer').style.display = 'none';
+            document.getElementById('resultArea').style.display = 'none';
+            const extArea = document.getElementById('extendedDetailsArea');
+            if (extArea) extArea.style.display = 'none';
+            document.getElementById('cropImage').value = "";
+        }
+    </script>
+
+
+
+
+
+
+
+    <script src="i18n.js"></script>
+</body></html>

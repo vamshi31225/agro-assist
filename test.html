@@ -1,0 +1,37 @@
+<html><head></head><body>﻿
+
+
+  <title>Booking Test</title>
+
+
+  <button onclick="saveBooking()" data-i18n="save_booking">Save Booking</button>
+  <button onclick="getBookings()" data-i18n="get_bookings">Get Bookings</button>
+
+  <script>
+    function saveBooking() {
+      fetch("http://localhost:3000/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "Ramesh",
+          date: "2026-03-12",
+          service: "Tractor"
+        })
+      })
+      .then(res => res.json())
+      .then(data => alert("Saved: " + JSON.stringify(data)));
+    }
+
+    function getBookings() {
+      fetch("http://localhost:3000/api/bookings")
+      .then(res => res.json())
+      .then(data => alert("Bookings: " + JSON.stringify(data)));
+    }
+  </script>
+
+
+
+
+
+    <script src="i18n.js"></script>
+</body></html>

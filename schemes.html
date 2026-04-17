@@ -1,0 +1,384 @@
+<html lang="en"><head></head><body>﻿
+
+
+
+    <meta charset="UTF-8">
+    <title>Government Schemes</title>
+    <link rel="stylesheet" href="css.css">
+
+
+
+
+    <header>
+        <h1 data-i18n="government_schemes_1"> Government Schemes</h1>
+    </header>
+
+    <nav>
+        <a href="index.html" data-i18n="home">Home</a>
+        <a href="dashboard.html" data-i18n="dashboard">Dashboard</a>
+        <a href="advisory.html" data-i18n="crop_advisory">Crop Advisory</a>
+        <a href="schemes.html" data-i18n="schemes_1">Schemes</a>
+        <a href="booking.html" data-i18n="equipment_booking">Equipment Booking</a>
+        <a href="contact.html" data-i18n="contact_1">Contact</a>
+    
+            <select class="langSwitcher" onchange="switchLanguage(this.value)" style="margin-left:15px; padding:6px 12px; border-radius:5px; background:#fff; color:#2e7d32; border:1px solid #2e7d32; font-weight:bold; cursor:pointer;">
+                <option value="en">EN</option>
+                <option value="te">తెలుగు</option>
+            </select>
+        </nav>
+
+    <div class="container">
+
+        <h2>Available Support &amp; Subsidies</h2>
+        
+        <!-- Calculator Section -->
+        <div class="card" style="border: 2px solid #2e7d32; background: #e8f5e9;">
+            <h3> Loan &amp; Subsidy Estimator</h3>
+            <p data-i18n="calculate_your_estimated_loan">Calculate your estimated loan eligibility and potential subsidy amount based on your farming details.</p>
+            <label data-i18n="land_size_in_acres">Land Size (in Acres)</label>
+            <input type="number" id="landSize" placeholder="E.g. 5" data-i18n-placeholder="e_g_5_ph">
+            <label data-i18n="crop_type">Crop Type</label>
+            <select id="cropType">
+                <option value="cash">Cash Crop (Cotton, Sugarcane)</option>
+                <option value="food">Food Crop (Wheat, Rice)</option>
+                <option value="horticulture">Horticulture (Fruits, Vegetables)</option>
+            </select>
+            <label data-i18n="annual_income">Annual Income (â‚¹)</label>
+            <input type="number" id="annualIncome" placeholder="E.g. 150000" data-i18n-placeholder="e_g_150000_ph">
+            
+            <button onclick="calculateLoan()" data-i18n="calculate_eligibility">Calculate Eligibility</button>
+            
+            <div id="calcResult" style="display:none; margin-top: 20px; padding: 15px; background: white; border-radius: 8px;">
+                <h4 style="color: #2e7d32; margin-top: 0;" data-i18n="estimation_results">Estimation Results</h4>
+                <p><strong>Max Loan Limit (KCC):</strong> â‚¹<span id="loanAmount"></span></p>
+                <p><strong>Estimated Scheme Subsidy:</strong> â‚¹<span id="subsidyAmount"></span></p>
+                <p style="font-size: 0.9em; color: #555; margin-top: 10px;" data-i18n="this_is_an_estimate_based_on">* This is an estimate based on standard KCC norms. Actuals may vary by bank and state.</p>
+            </div>
+        </div>
+
+        <script>
+            function calculateLoan() {
+                const landSize = parseFloat(document.getElementById('landSize').value);
+                const cropType = document.getElementById('cropType').value;
+                const income = parseFloat(document.getElementById('annualIncome').value);
+                
+                if(!landSize || !income) {
+                    alert("Please enter land size and annual income.");
+                    return;
+                }
+                
+                // Base calculation: 40,000 per acre for food crops, 60k for cash, 80k for horticulture
+                let ratePerAcre = 40000;
+                if(cropType === 'cash') ratePerAcre = 60000;
+                if(cropType === 'horticulture') ratePerAcre = 80000;
+                
+                let maxLoan = landSize * ratePerAcre;
+                
+                let subsidy = maxLoan * 0.05; // 5% base subsidy estimate
+                
+                document.getElementById('loanAmount').innerText = maxLoan.toLocaleString('en-IN');
+                document.getElementById('subsidyAmount').innerText = subsidy.toLocaleString('en-IN');
+                document.getElementById('calcResult').style.display = 'block';
+            }
+        </script>
+
+        <!-- ============================================== -->
+        <!-- NEW CROP INSURANCE & CLAIM ASSISTANT SECTION   -->
+        <!-- ============================================== -->
+        <h2 style="margin-top: 40px; color: #2e7d32; border-bottom: 2px solid #e8f5e9; padding-bottom: 5px;">Crop Insurance & Claim Assistant 🛡️</h2>
+        
+        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+            <button onclick="toggleInsSection('ins-explore')" class="ins-tab-btn" id="btn-ins-explore" style="flex:1; background: #2e7d32; color: white; padding: 10px; border: 2px solid #2e7d32; border-radius: 5px; cursor: pointer; font-weight: bold;">Explore Schemes</button>
+            <button onclick="toggleInsSection('ins-apply')" class="ins-tab-btn" id="btn-ins-apply" style="flex:1; background: white; color: #2e7d32; padding: 10px; border: 2px solid #2e7d32; border-radius: 5px; cursor: pointer; font-weight: bold;">Apply for Claim</button>
+            <button onclick="toggleInsSection('ins-track')" class="ins-tab-btn" id="btn-ins-track" style="flex:1; background: white; color: #2e7d32; padding: 10px; border: 2px solid #2e7d32; border-radius: 5px; cursor: pointer; font-weight: bold;">Track Status</button>
+        </div>
+
+        <!-- Explore Schemes Interface -->
+        <div id="ins-explore" class="ins-section">
+            <h3 style="margin-bottom: 5px;">Available Insurance Schemes</h3>
+            <p style="color: #666; font-size: 0.9em; margin-bottom: 20px;">Review eligibility and Document Guidance to protect your crops safely.</p>
+            <div id="schemesListTarget">
+                <p>Loading schemes...</p>
+            </div>
+        </div>
+
+        <!-- Application Interface -->
+        <div id="ins-apply" class="ins-section card" style="display: none;">
+            <h3>Submit Insurance Claim Application</h3>
+            <form id="insuranceForm">
+                <label>Farmer Name</label>
+                <input type="text" id="insName" required placeholder="E.g. Ramesh Kumar" data-voice="true">
+                
+                <label>Crop Type</label>
+                <select id="insCropType" required onchange="smartRecommend()">
+                    <option value="">Select Crop</option>
+                    <option value="Food/Cereals">Food / Cereals (Wheat, Rice)</option>
+                    <option value="Cash Crop">Cash Crop (Cotton, Sugarcane)</option>
+                    <option value="Horticulture">Horticulture (Fruits, Vegetables)</option>
+                </select>
+
+                <label>Land Size (Acres)</label>
+                <input type="number" id="insLandSize" required placeholder="E.g. 3.5" data-voice="true">
+
+                <label>Location (Village/District)</label>
+                <input type="text" id="insLocation" required placeholder="E.g. Warangal" data-voice="true">
+
+                <label>Registered Phone Number</label>
+                <input type="tel" id="insContact" required placeholder="E.g. 9876543210" data-voice="true">
+
+                <div id="smartRecommendationBox" style="display:none; background: #e3f2fd; border-left: 4px solid #1976d2; padding: 15px; margin-bottom: 15px; border-radius: 4px;">
+                    <strong style="color: #1565c0;">🧠 Smart Recommendation:</strong> <span id="smartRecText">Based on your selection, PMFBY is highly recommended.</span>
+                </div>
+
+                <label>Target Scheme</label>
+                <select id="insScheme" required>
+                    <option value="PMFBY">PMFBY (Standard Default)</option>
+                    <option value="WBCIS">WBCIS (Weather/Horticulture specific)</option>
+                    <option value="CPIS">CPIS (Coconut Palm)</option>
+                    <option value="Other">Other State Program</option>
+                </select>
+
+                <button type="submit" style="background:#1565c0; margin-top: 10px;">Submit Claim Applicaton</button>
+            </form>
+            <div id="insFormSuccess" style="display:none; color: green; font-weight: bold; margin-top: 15px;">âœ… Application registered successfully!</div>
+        </div>
+
+        <!-- Tracking Interface -->
+        <div id="ins-track" class="ins-section card" style="display: none;">
+            <h3>Track Claim Status 📊</h3>
+            <label>Enter Registered Phone Number</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="tel" id="trackContact" placeholder="Your Phone Number" style="flex: 1;" data-voice="true">
+                <button onclick="checkClaimStatus()" style="background: #e65100; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Check Status</button>
+            </div>
+            <div id="trackResultBox" style="margin-top: 20px;"></div>
+        </div>
+
+        <script>
+            // Insurance Section Toggle
+            function toggleInsSection(sectionId) {
+                document.querySelectorAll('.ins-section').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.ins-tab-btn').forEach(btn => {
+                    btn.style.background = 'white';
+                    btn.style.color = '#2e7d32';
+                });
+                
+                document.getElementById(sectionId).style.display = 'block';
+                const activeBtn = document.getElementById('btn-' + sectionId);
+                activeBtn.style.background = '#2e7d32';
+                activeBtn.style.color = 'white';
+            }
+
+            // Smart Recommendation Logic
+            function smartRecommend() {
+                const cType = document.getElementById('insCropType').value;
+                const box = document.getElementById('smartRecommendationBox');
+                const tBox = document.getElementById('smartRecText');
+                const sSelect = document.getElementById('insScheme');
+
+                if(!cType) { box.style.display = 'none'; return; }
+                
+                box.style.display = 'block';
+                if(cType === 'Horticulture') {
+                    tBox.innerText = "For Horticulture/Fruit crops heavily dependent on rain margins, WBCIS (Weather Based Crop Insurance Scheme) is highly recommended over standard plans.";
+                    sSelect.value = 'WBCIS';
+                } else if(cType === 'Cash Crop' || cType === 'Food/Cereals') {
+                    tBox.innerText = "For standard structural yields, PMFBY (Pradhan Mantri Fasal Bima Yojana) guarantees the best centralized payout protection.";
+                    sSelect.value = 'PMFBY';
+                }
+            }
+
+            // API: Fetch Schemes
+            async function fetchInsuranceSchemes() {
+                const target = document.getElementById('schemesListTarget');
+                try {
+                    const res = await fetch('/api/insurance-schemes');
+                    if(!res.ok) throw new Error();
+                    const schemes = await res.json();
+                    
+                    target.innerHTML = schemes.map(s => `
+                        <div class="card" style="border-left: 4px solid #1976d2; margin-bottom: 15px;">
+                            <h4 style="margin: 0 0 10px 0; color: #1565c0; font-size: 1.1rem;">${s.name}</h4>
+                            <p style="margin: 5px 0;"><strong>Benefits:</strong> ${s.benefits}</p>
+                            <p style="margin: 5px 0;"><strong>Eligibility:</strong> ${s.eligibility}</p>
+                            <div style="background: #fff3e0; padding: 10px; margin-top: 10px; border-radius: 4px; font-size: 0.9em;">
+                                <strong>📄 Document Guidance:</strong> <br> ${s.documents.map(d => `â€¢ ${d}`).join('<br>')}
+                            </div>
+                        </div>
+                    `).join('');
+                } catch(e) {
+                    target.innerHTML = `<p style="color:red;">Error loading schemes. Please check your internet connection.</p>`;
+                }
+            }
+
+            // API: Apply Claim
+            document.getElementById('insuranceForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const payload = {
+                    name: document.getElementById('insName').value,
+                    cropType: document.getElementById('insCropType').value,
+                    landSize: document.getElementById('insLandSize').value,
+                    location: document.getElementById('insLocation').value,
+                    contactDetails: document.getElementById('insContact').value,
+                    scheme: document.getElementById('insScheme').value
+                };
+
+                try {
+                    const res = await fetch('/api/apply-insurance', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if(res.ok) {
+                        document.getElementById('insuranceForm').reset();
+                        document.getElementById('smartRecommendationBox').style.display = 'none';
+                        document.getElementById('insFormSuccess').style.display = 'block';
+                        setTimeout(() => document.getElementById('insFormSuccess').style.display = 'none', 5000);
+                    } else {
+                        throw new Error();
+                    }
+                } catch(err) {
+                    alert("Application Failed to sync to Database. Fallback running locally.");
+                }
+            });
+
+            // API: Track Status
+            async function checkClaimStatus() {
+                const telEl = document.getElementById('trackContact').value;
+                const resultBox = document.getElementById('trackResultBox');
+                if(!telEl) return alert("Please specify a Phone Number.");
+
+                try {
+                    resultBox.innerHTML = 'Fetching status...';
+                    const res = await fetch('/api/claim-status?contact=' + encodeURIComponent(telEl));
+                    if(!res.ok) throw new Error();
+                    const data = await res.json();
+                    
+                    if(data.length === 0) {
+                        resultBox.innerHTML = `<span style="color: #d32f2f;">No claims found for this phone number.</span>`;
+                    } else {
+                        resultBox.innerHTML = data.map(claim => {
+                            let color = 'orange';
+                            if(claim.status === 'Approved') color = 'green';
+                            if(claim.status === 'Rejected') color = 'red';
+                            return `
+                                <div style="background: #f9f9f9; padding: 15px; border-radius: 5px; border-left: 5px solid ${color}; margin-bottom: 15px;">
+                                    <strong>Claim ID:</strong> #${claim._id.slice(-6).toUpperCase()}<br>
+                                    <strong>Scheme:</strong> ${claim.scheme}<br>
+                                    <strong>Crop:</strong> ${claim.cropType}<br>
+                                    <strong>Date:</strong> ${new Date(claim.appliedAt).toLocaleDateString()}<br>
+                                    <h4 style="color: ${color}; margin: 10px 0 0 0; font-size: 1.1em;">Status: ${claim.status}</h4>
+                                </div>
+                            `;
+                        }).join('');
+                    }
+                } catch(e) {
+                    resultBox.innerHTML = `<span style="color: red;">Failed to retrieve records. Ensure the backend is active.</span>`;
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', fetchInsuranceSchemes);
+        </script>
+
+        <p style="margin-top: 50px;" data-i18n="explore_central_and_state_gove">Explore central and state government schemes designed to benefit you. Click "How to Apply" for step-by-step
+        instructions.</p>
+
+        <div class="card">
+            <h3 data-i18n="pm_kisan_pradhan_mantri_kisan"> PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)</h3>
+            <p data-i18n="6000_per_year_income_support">â‚¹6000 per year income support to all landholding farmer families, directly deposited to bank accounts.
+            </p>
+            <details>
+                <summary>How to Apply</summary>
+                <ol class="step-list">
+                    <li data-i18n="visit_the_official_pm_kisan_po">Visit the official PM-KISAN portal (pmkisan.gov.in).</li>
+                    <li>Click on the <strong>'New Farmer Registration'</strong> block under the 'Farmers Corner'
+                        section.</li>
+                    <li data-i18n="enter_your_aadhaar_number_and">Enter your Aadhaar number and select your state from the drop-down menu.</li>
+                    <li data-i18n="fill_out_the_registration_form">Fill out the registration form with your personal details, land records, and bank account
+                        details.</li>
+                    <li data-i18n="submit_the_form_you_can_track">Submit the form. You can track your application status using the 'Status of Self Registered/CSC
+                        Farmer' option.</li>
+                </ol>
+            </details>
+        </div>
+
+        <div class="card">
+            <h3 data-i18n="pradhan_mantri_fasal_bima_yoja_1"> Pradhan Mantri Fasal Bima Yojana (PMFBY)</h3>
+            <p data-i18n="comprehensive_crop_insurance_c">Comprehensive crop insurance covering yield losses due to natural disasters, pests, or diseases.</p>
+            <details>
+                <summary>How to Apply</summary>
+                <ol class="step-list">
+                    <li data-i18n="go_to_the_pmfby_portal_pmfby_g">Go to the PMFBY portal (pmfby.gov.in).</li>
+                    <li>Click on <strong>'Farmer Corner'</strong> to apply for crop insurance yourself.</li>
+                    <li data-i18n="register_with_your_mobile_numb">Register with your mobile number to create an account.</li>
+                    <li data-i18n="log_in_and_initiate_a_new_appl">Log in and initiate a new application by providing exact details of your land, crop sown, and
+                        bank passbook.</li>
+                    <li data-i18n="alternatively_you_can_visit_yo">Alternatively, you can visit your nearest CSC (Common Service Centre) or bank branch where you
+                        hold an active loan.</li>
+                </ol>
+            </details>
+        </div>
+
+        <div class="card">
+            <h3 data-i18n="kisan_credit_card_kcc"> Kisan Credit Card (KCC)</h3>
+            <p data-i18n="meet_comprehensive_credit_requ">Meet comprehensive credit requirements of the agriculture sector at very low interest rates.</p>
+            <details>
+                <summary>How to Apply</summary>
+                <ol class="step-list">
+                    <li data-i18n="download_the_kcc_application_f">Download the KCC application form from the PM-KISAN portal or your respective bank's website.
+                    </li>
+                    <li data-i18n="fill_out_the_simple_one_page_a">Fill out the simple one-page application form.</li>
+                    <li data-i18n="attach_copies_of_land_document">Attach copies of land documents, Aadhaar Card, PAN Card, and passport-size photographs.</li>
+                    <li data-i18n="submit_the_completed_form_dire">Submit the completed form directly at the bank branch where you have a savings account.</li>
+                    <li data-i18n="the_bank_will_verify_your_land">The bank will verify your landholdings and issue a KCC limit based on your crops and acreage.
+                    </li>
+                </ol>
+            </details>
+        </div>
+
+        <div class="card">
+            <h3 data-i18n="soil_health_card_scheme"> Soil Health Card Scheme</h3>
+            <p data-i18n="get_a_detailed_report_on_the_n">Get a detailed report on the nutrient status of your soil, along with recommendation on crop-wise
+                fertilizer usage.</p>
+            <details>
+                <summary>How to Apply</summary>
+                <ol class="step-list">
+                    <li data-i18n="contact_your_local_agriculture">Contact your local agriculture department official or village sarpanch.</li>
+                    <li data-i18n="officials_will_visit_your_farm">Officials will visit your farm to collect soil samples.</li>
+                    <li data-i18n="the_samples_are_tested_at_mobi">The samples are tested at mobile or permanent soil testing laboratories.</li>
+                    <li data-i18n="once_tested_the_soil_health_ca">Once tested, the Soil Health Card will be generated online (soilhealth.dac.gov.in).</li>
+                    <li data-i18n="you_can_download_it_using_your">You can download it using your mobile number or farmer ID from the portal.</li>
+                </ol>
+            </details>
+        </div>
+
+        <div class="card">
+            <h3 data-i18n="pm_kusum_pradhan_mantri_kisan">â˜€ï¸ PM-KUSUM (Pradhan Mantri Kisan Urja Suraksha evam Utthaan Mahabhiyan)</h3>
+            <p data-i18n="subsidies_to_install_solar_pum">Subsidies to install solar pumps and grid-connected solar power plants to ensure energy security.</p>
+            <details>
+                <summary>How to Apply</summary>
+                <ol class="step-list">
+                    <li data-i18n="visit_the_official_kusum_porta">Visit the official KUSUM portal (mnre.gov.in/kusum) or your State's Renewable Energy portal.
+                    </li>
+                    <li data-i18n="select_the_applicable_componen">Select the applicable Component (A, B, or C) for your farm (e.g., standalone solar pump).</li>
+                    <li data-i18n="register_online_by_providing_y">Register online by providing your Aadhaar, bank details, and farmland Khatauni/Khasra documents.
+                    </li>
+                    <li data-i18n="pay_the_farmer_s_share_usually">Pay the farmer's share (usually 10%) online once your application is approved.</li>
+                    <li data-i18n="the_vendor_assigned_by_the_sta">The vendor assigned by the state government will survey your field and install the solar pump.
+                    </li>
+                </ol>
+            </details>
+        </div>
+
+    </div>
+
+    <footer>Farmer Welfare </footer>
+
+
+
+
+
+
+    <script src="i18n.js"></script>
+</body></html>

@@ -1,0 +1,525 @@
+<html lang="en"><head></head><body>﻿
+
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Farmer | 3D Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+    }
+
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
+    }
+
+
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    .login-container {
+      perspective: 1000px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .login-box {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      width: 400px;
+      padding: 50px;
+      border-radius: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+      transform: rotateX(0deg) rotateY(0deg);
+      transition: transform 0.6s ease-out;
+      animation: slideInUp 0.8s ease-out;
+    }
+
+    .login-box:hover {
+      transform: rotateX(5deg) rotateY(-5deg);
+      box-shadow: 0 15px 45px rgba(31, 38, 135, 0.5);
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(60px) rotateX(-20deg);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0deg);
+      }
+    }
+
+    .title {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+      font-size: 32px;
+      font-weight: bold;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      animation: fadeInDown 0.8s ease-out;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .input-group {
+      margin-bottom: 25px;
+      animation: fadeInUp 0.8s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .input-group:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .input-group:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    .input-group:nth-child(4) {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 14px 15px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: white;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .input-group input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .input-group input:focus {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+      transform: scale(1.02);
+    }
+
+    .remember-forgot {
+      display: flex;
+      justify-content: space-between;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+      margin-bottom: 30px;
+      animation: fadeInUp 0.8s ease-out 0.8s both;
+    }
+
+    .remember-forgot a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .remember-forgot a:hover {
+      color: white;
+      text-decoration: underline;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+      animation: fadeInUp 0.8s ease-out 0.8s both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .login-btn:hover:before {
+      left: 100%;
+    }
+
+    .login-btn:active {
+      transform: translateY(-1px);
+    }
+
+    .signup-link {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+      animation: fadeInUp 0.8s ease-out 0.9s both;
+    }
+
+    .signup-link a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .signup-link a:after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: white;
+      transition: width 0.3s;
+    }
+
+    .signup-link a:hover:after {
+      width: 100%;
+    }
+
+    .floating-element {
+      position: fixed;
+      pointer-events: none;
+      font-size: 40px;
+      opacity: 0.1;
+      animation: float 6s infinite ease-in-out;
+    }
+
+    .floating-element:nth-child(1) { bottom: 10%; left: 5%; animation-delay: 0s; }
+    .floating-element:nth-child(2) { bottom: 20%; right: 8%; animation-delay: 1s; }
+    .floating-element:nth-child(3) { bottom: 30%; left: 15%; animation-delay: 2s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(10deg); }
+    }
+
+    @media (max-width: 500px) {
+      .login-box {
+        width: 90%;
+        padding: 40px 25px;
+      }
+
+      .title {
+        font-size: 24px;
+      }
+    }
+  </style>
+
+
+
+  <div class="stars" id="stars"></div>
+
+  <div class="floating-element"></div>
+  <div class="floating-element"></div>
+  <div class="floating-element"></div>
+
+
+
+  <div class="login-container">
+    <div class="login-box">
+      <h1 class="title" data-i18n="smart_farmer"> Smart Farmer</h1>
+      <div id="userCount" style="text-align: center; color: rgba(255,255,255,0.8); margin-bottom: 20px; font-size: 14px;">
+        Loading community stats...
+      </div>
+      <form id="authForm">
+        <div class="input-group">
+          <input id="username" type="text" placeholder="Username" required="" data-i18n-placeholder="username_ph">
+        </div>
+        <div class="input-group" id="emailGroup">
+          <input id="email" type="email" placeholder="Email" required="" data-i18n-placeholder="email_ph">
+        </div>
+        <div class="input-group">
+          <input id="password" type="password" placeholder="Password" required="" data-i18n-placeholder="password_ph">
+          <small id="passwordHelp" style="color:#fff;font-size:12px;display:block;margin-top:5px;"></small>
+        </div>
+        <div class="remember-forgot" id="rememberGroup">
+          <label>
+            <input type="checkbox" style="margin-right: 5px;"> Remember me
+          </label>
+          <a href="#" data-i18n="forgot_password">Forgot Password?</a>
+        </div>
+        <button type="submit" class="login-btn" id="submitBtn" data-i18n="login">Login</button>
+        <div class="signup-link">
+          <span id="toggleText" data-i18n="don_t_have_an_account">Don't have an account?</span> <a href="#" id="toggleAuth" data-i18n="sign_up">Sign Up</a>
+        </div>
+        <!-- Weather Page Link -->
+<div style="text-align:center; margin-top:15px;">
+  <a href="weather.html" style="color:white;font-weight:bold;" data-i18n="check_weather"> Check Weather</a>
+</div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let isLogin = true;
+
+    // Create twinkling stars background
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      const starCount = 100;
+
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        star.style.width = Math.random() * 2 + 'px';
+        star.style.height = star.style.width;
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        star.style.animationDelay = Math.random() * 2 + 's';
+        starsContainer.appendChild(star);
+      }
+    }
+
+    createStars();
+
+    // Fetch user count
+    async function fetchUserCount() {
+      try {
+        const response = await fetch('/users/count');
+        const data = await response.json();
+        if (data.count !== undefined) {
+          document.getElementById('userCount').textContent = `Join ${data.count} farmers already using Agro Assist!`;
+        }
+      } catch (err) {
+        console.error('Failed to fetch user count');
+        document.getElementById('userCount').textContent = 'Welcome to our farming community!';
+      }
+    }
+
+    fetchUserCount();
+
+    // Toggle between Login and Signup
+    const toggleAuth = document.getElementById('toggleAuth');
+    const authTitle = document.querySelector('.title');
+    const emailGroup = document.getElementById('emailGroup');
+    const rememberGroup = document.getElementById('rememberGroup');
+    const submitBtn = document.getElementById('submitBtn');
+    const toggleText = document.getElementById('toggleText');
+
+    // Default to Login mode (hide email, update text)
+    function setLoginMode() {
+      isLogin = true;
+      emailGroup.style.display = 'none';
+      document.getElementById('email').required = false;
+      rememberGroup.style.display = 'flex';
+      submitBtn.textContent = 'Login';
+      toggleText.textContent = "Don't have an account?";
+      toggleAuth.textContent = 'Sign Up';
+    }
+
+    setLoginMode(); // Initialize as login
+
+    toggleAuth.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (isLogin) {
+        isLogin = false;
+        emailGroup.style.display = 'block';
+        document.getElementById('email').required = true;
+        rememberGroup.style.display = 'none';
+        submitBtn.textContent = 'Sign Up';
+        toggleText.textContent = 'Already have an account?';
+        toggleAuth.textContent = 'Login';
+      } else {
+        setLoginMode();
+      }
+    });
+
+    function strengthText(pw) {
+      let score = 0;
+      if (pw.length >= 6) score++;
+      if (/[A-Z]/.test(pw)) score++;
+      if (/[a-z]/.test(pw)) score++;
+      if (/\d/.test(pw)) score++;
+      if (/[^A-Za-z0-9]/.test(pw)) score++;
+      switch(score) {
+        case 0: case 1: return 'Very weak';
+        case 2: return 'Weak';
+        case 3: return 'Moderate';
+        case 4: return 'Strong';
+        case 5: return 'Very strong';
+      }
+    }
+
+    document.getElementById('password').addEventListener('input', function() {
+      const help = document.getElementById('passwordHelp');
+      const txt = strengthText(this.value);
+      help.textContent = txt ? 'Strength: ' + txt : '';
+    });
+
+    document.getElementById('authForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const email = document.getElementById('email').value.trim();
+
+      const endpoint = isLogin ? '/login' : '/signup';
+      const payload = isLogin ? { username, password } : { username, email, password };
+
+      submitBtn.disabled = true;
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = isLogin ? 'Logging in...' : 'Creating account...';
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert(data.message);
+          if (isLogin) {
+            window.location.href = 'dashboard.html';
+          } else {
+            setLoginMode(); // After signup, switch to login
+            fetchUserCount(); // Refresh count
+          }
+        } else {
+          alert(data.error || 'Something went wrong');
+          if (isLogin && data.error.includes('does not exist')) {
+            if (confirm('User does not exist. Would you like to create a new account?')) {
+              toggleAuth.click(); // Switch to signup
+            }
+          }
+        }
+      } catch (err) {
+        alert('Connection error. Please ensure the server is running.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
+
+    // Add mouse follow effect to the login box
+    const loginBox = document.querySelector('.login-box');
+    document.addEventListener('mousemove', function(e) {
+      const rect = loginBox.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      const angleX = (e.clientY - centerY) * 0.05;
+      const angleY = (e.clientX - centerX) * -0.05;
+      
+      if (Math.abs(angleX) < 10 && Math.abs(angleY) < 10) {
+        loginBox.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg)`;
+      }
+    });
+
+    // Reset on mouse leave
+    document.addEventListener('mouseleave', function() {
+      loginBox.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+  </script>
+
+
+
+
+
+  
+
+  <footer>
+     2026 Smart Farmer Project
+  </footer>
+
+  <script>
+    // Simple 3D rotating cube farm demo
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / 600, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, 300);
+    document.getElementById("animation3d").appendChild(renderer.domElement);
+
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshBasicMaterial({ color: 0x228B22, wireframe: true });
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+
+    camera.position.z = 5;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      cube.rotation.x += 0.01;
+      cube.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+
+
+
+
+
+
+
+    <script src="i18n.js"></script>
+</body></html>
