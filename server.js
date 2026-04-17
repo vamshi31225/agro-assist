@@ -10,7 +10,8 @@ const fs = require("fs");
 const app = express();
 
 // Connect to MongoDB
-mongoose.connect("mongodb://localhost:27017/agroDB")
+const mongoURI = process.env.MONGODB_URI || "mongodb://localhost:27017/agroDB";
+mongoose.connect(mongoURI)
 .then(() => console.log("MongoDB connected"))
 .catch(err => console.error("MongoDB connection error:", err));
 
